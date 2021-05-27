@@ -1,13 +1,17 @@
-FROM python:3.8-slim-buster
+FROM python:3.8.5
+
+EXPOSE 8000
 
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
+WORKDIR app
+
 # Install dependencies:
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Run the application:
 COPY . .
-CMD ["python", "myapp.py"]
+
+CMD ["chalice", "local", "--host", "0.0.0.0"]

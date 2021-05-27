@@ -1,11 +1,11 @@
 from chalice import Chalice
 
-app = Chalice(app_name='dream')
+app = Chalice(app_name="dream")
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return {'hello': 'world'}
+    return {"hello": "oyaa"}
 
 
 # The view function above will return {"hello": "world"}
@@ -26,4 +26,3 @@ def index():
 #     return {'user': user_as_json}
 #
 # See the README documentation for more examples.
-#
