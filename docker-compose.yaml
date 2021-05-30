@@ -17,11 +17,8 @@ services:
     environment:
       ENGINE: PostgreSQLJDBC
       POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
-      RESOURCE_ARN: "arn:aws:rds:us-east-1:123456789012:cluster:dummy"
-      SECRET_ARN: "arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy"
+      POSTGRES_DB: test
     ports:
       - "9228:80"
   db:

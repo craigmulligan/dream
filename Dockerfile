@@ -7,6 +7,7 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV PYTEST_ADDOPTS="--color=yes"
 ENV AWS_CONFIG_FILE=/root/.aws/config
+ENV AWS_ENDPOINT_URL="http://127.0.0.1:9228"
 
 WORKDIR app
 

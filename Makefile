@@ -7,7 +7,6 @@ dev:
 test:
 	docker-compose run app pytest 
 
-
 test_watch:
 	docker-compose run app ptw
 
