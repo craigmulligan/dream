@@ -2,3 +2,5 @@ chalice==1.23.0
 pytest==6.2.4
 pytest-testmon==1.1.1
 pytest-watch==4.2.0
+sqlalchemy==1.4.17
+pydataapi==0.4.22
