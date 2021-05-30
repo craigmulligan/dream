@@ -1,10 +1,8 @@
-from sqlalchemy import Column, DateTime, Integer, String, create_engine
-from sqlalchemy.engine import Connection
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, DateTime, Integer, String
+from .base import Base
 
 
-class User(declarative_base()):
+class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(), default=None)

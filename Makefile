@@ -12,3 +12,6 @@ test_watch:
 
 run:
 	docker-compose  run app /bin/bash  
+
+migration_generate:
+	docker-compose  run app alembic revision --autogenerate -m "$(message)"
