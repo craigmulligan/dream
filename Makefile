@@ -11,7 +11,10 @@ test_watch:
 	docker-compose run app ptw
 
 run:
-	docker-compose  run app /bin/bash  
+	docker-compose run app /bin/bash  
 
 migration_generate:
-	docker-compose  run app alembic revision --autogenerate -m "$(message)"
+	docker-compose run app alembic revision --autogenerate -m "$(message)"
+
+migrate:
+	docker-compose run app alembic upgrade head
