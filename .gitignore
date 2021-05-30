@@ -2,3 +2,4 @@
 .chalice/venv/
 venv37
 __pycache__
+.testmondata
