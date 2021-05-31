@@ -5,9 +5,12 @@ EXPOSE 8000
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 ENV PYTEST_ADDOPTS="--color=yes"
+# Creds for aws 
 ENV AWS_CONFIG_FILE=/root/.aws/config
-ENV AWS_ENDPOINT_URL="http://127.0.0.1:9228"
+# This is so we wipe the file on every container run.
+ENV TESTMON_DATAFILE=/root/.testmondata
 
 WORKDIR app
 
