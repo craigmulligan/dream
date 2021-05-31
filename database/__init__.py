@@ -17,12 +17,32 @@ engine = create_engine(
 )
 
 
-Session = sessionmaker()
-Session.configure(bind=engine)
+class BindManager:
+    """
+    Allows us to use a single connection
+    for tests or Engine for other sessions.
+    """
+
+    def __init__(self):
+        self.bind = None
+
+    def get_bind(self, bind=None):
+        if bind is not None:
+            self.bind = bind
+
+        if self.bind is None:
+            self.bind = engine
+
+        return self.bind
+
+
+bind_manager = BindManager()
 
 
 @contextmanager
-def session_scope():
+def session_scope(bind=None):
+    Session = sessionmaker()
+    Session.configure(bind=bind_manager.get_bind(bind=bind))
     session = Session()
     try:
         yield session

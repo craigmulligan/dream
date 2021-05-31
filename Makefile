@@ -4,11 +4,11 @@ build:
 dev:
 	docker-compose run app chalice local
 
-test:
+test: migrate
 	docker-compose run app pytest 
 
-test_watch:
-	docker-compose run app ptw
+test_watch: migrate
+	docker-compose run app ptw -- --testmon
 
 run:
 	docker-compose run app /bin/bash  

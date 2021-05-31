@@ -4,7 +4,6 @@ import json
 
 def test_get_user(test_client, session):
     user = User(name="hobochild")
-
     session.add(user)
     session.commit()
 
