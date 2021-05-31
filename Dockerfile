@@ -12,6 +12,8 @@ ENV AWS_CONFIG_FILE=/root/.aws/config
 # This is so we wipe the file on every container run.
 ENV TESTMON_DATAFILE=/root/.testmondata
 
+RUN mkdir -p /root/.pytest/cache
+
 WORKDIR app
 
 # Install dependencies:
