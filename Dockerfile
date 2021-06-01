@@ -3,6 +3,7 @@ FROM python:3.8.5
 ARG USER_ID
 ARG GROUP_ID
 
+# Avoid file permission issues for container user files that are written to host volume.
 RUN addgroup --gid $GROUP_ID user
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 USER user
