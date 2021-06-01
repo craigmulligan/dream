@@ -1,2 +1,2 @@
 [tool.pytest.ini_options]
-cache_dir="/root/.pytest/cache"
+cache_dir="/home/user/.pytest/cache"

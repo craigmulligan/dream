@@ -8,8 +8,8 @@ services:
       - db
       - rds
     volumes:
-      - ${HOME}/.aws/config:/root/.aws/config
-      - ${PWD}/:/app
+      - ${HOME}/.aws/config:/home/user/.aws/config
+      - ${PWD}/:/home/user/app
     ports:
       - "8000:8000"
   rds:
