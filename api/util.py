@@ -8,6 +8,6 @@ def ping():
     return {"message": "pong"}
 
 
-@blueprint.route("/ready", methods=["GET"])
+@blueprint.route("/log", methods=["GET"])
 def ready():
-    return {"message": "ready"}
+    return {"message": "ok"}

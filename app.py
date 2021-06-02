@@ -1,5 +1,8 @@
 from chalice import Chalice
-from api import register_blueprints
 
-app = Chalice(app_name="app")
-register_blueprints(app)
+app = Chalice(app_name="dream")
+
+
+@app.route("/xyz")
+def index():
+    return {"hello": "world"}
