@@ -22,3 +22,5 @@ migrate:
 fmt:
 	docker-compose run app black .
 
+local:
+	docker-compose run app chalice-local deploy

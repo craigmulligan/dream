@@ -6,6 +6,7 @@ blessed==1.17.6
 boto3==1.17.84
 botocore==1.20.84
 chalice==1.23.0
+chalice-local==0.1.1
 click==7.1.2
 colorama==0.4.4
 coverage==5.5
@@ -14,6 +15,7 @@ greenlet==1.1.0
 iniconfig==1.1.1
 inquirer==2.7.0
 jmespath==0.10.0
+localstack-client==1.20
 Mako==1.1.4
 MarkupSafe==2.0.1
 marshmallow==3.12.1
