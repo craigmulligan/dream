@@ -2,7 +2,7 @@ build:
 	docker-compose build --build-arg USER_ID=$$(id -u) --build-arg GROUP_ID=$$(id -g)
 
 dev:
-	docker-compose run app chalice local
+	docker-compose run --service-ports app
 
 test: migrate
 	docker-compose run app pytest 
@@ -24,3 +24,6 @@ fmt:
 
 local:
 	docker-compose run app chalice-local deploy
+
+invoke:
+	awslocal lambda invoke --function-name dream-dev --payload "{}" out.txt

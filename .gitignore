@@ -3,3 +3,4 @@
 venv37
 __pycache__
 .testmondata
+.localstack

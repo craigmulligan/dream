@@ -10,7 +10,6 @@ USER user
 
 EXPOSE 8000
 
-
 RUN mkdir -p /home/user/.pytest/cache
 
 ENV VIRTUAL_ENV=/home/user/venv
@@ -31,4 +30,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["chalice", "local", "--host", "0.0.0.0"]
+CMD ["chalice", "local", "--host", "0.0.0.0", "--port", "80"]

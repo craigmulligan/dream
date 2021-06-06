@@ -1,18 +1,23 @@
 version: "3.1"
 
 services:
+  web:
+    image: nginx
+    ports:
+      - 8080:80
   app:
+    ports:
+      - 8000:80
     build:
       context: .
     depends_on:
       - db
       - rds
       - localstack
+      - web
     volumes:
       - ${HOME}/.aws/config:/home/user/.aws/config
       - ${PWD}/:/home/user/app
-    ports:
-      - "8000:8000"
     environment:
       LOCALSTACK_HOST: localstack
   rds:
@@ -24,7 +29,7 @@ services:
       POSTGRES_PASSWORD: example
       POSTGRES_DB: test
     ports:
-      - "9228:80"
+      - 9228:80
   db:
     image: postgres:10.7-alpine
     restart: always
@@ -32,9 +37,9 @@ services:
       POSTGRES_PASSWORD: example
       POSTGRES_DB: test
     ports:
-      - "5432:5432"
+      - 5432:5432
   localstack:
-    image: localstack/localstack
+    image: localstack/localstack:0.12.12
     ports:
       - 4566:4566
     environment:
@@ -42,6 +47,9 @@ services:
       EDGE_PORT: 4566
       AWS_DEFAULT_REGION: us-east-1
       DEBUG: 1
+      DATA_DIR: /tmp/localstack
+      LAMBDA_FORWARD_URL: http://app
+      LAMBDA_FALLBACK_URL: http://app
     volumes:
-      - "/tmp/localstack:/tmp/localstack"
+      - "${PWD}/.localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
