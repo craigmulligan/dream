@@ -27,3 +27,6 @@ local:
 
 invoke:
 	awslocal lambda invoke --function-name dream-dev --payload "{}" out.txt
+
+setup:
+	awslocal sns create-topic --name MyDemoTopic

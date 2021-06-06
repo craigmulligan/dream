@@ -14,6 +14,13 @@ def index():
     return {"hello": "world"}
 
 
+@app.on_sns_message(topic="MyDemoTopic")
+def handle_sns_message(event):
+    app.log.debug(
+        "Received message with subject: %s, message: %s", event.subject, event.message
+    )
+
+
 @app.route(
     "/{api_version}/functions/{function_name}/invocations",
     methods=["GET", "POST"],
