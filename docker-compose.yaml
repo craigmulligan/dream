@@ -43,7 +43,7 @@ services:
     ports:
       - 4566:4566
     environment:
-      SERVICES: sqs,s3,cloudwatch,lambda,logs,iam,apigateway
+      SERVICES: sqs,s3,cloudwatch,lambda,logs,iam,apigateway,sns
       EDGE_PORT: 4566
       AWS_DEFAULT_REGION: us-east-1
       DEBUG: 1
