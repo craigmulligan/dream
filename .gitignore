@@ -4,3 +4,5 @@ venv37
 __pycache__
 .testmondata
 .localstack
+infrastructure/.terraform/
+infrastructure/*.zip

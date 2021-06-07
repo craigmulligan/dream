@@ -30,3 +30,9 @@ invoke:
 
 setup:
 	awslocal sns create-topic --name MyDemoTopic
+
+package:
+	chalice-local package --pkg-format terraform infrastructure
+
+terraform_apply: package
+	docker-compose run app terraform apply

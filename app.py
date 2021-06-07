@@ -14,7 +14,7 @@ def index():
     return {"hello": "world"}
 
 
-@app.on_sns_message(topic="MyDemoTopic")
+@app.on_sns_message(topic="audit-log")
 def handle_sns_message(event):
     app.log.debug(
         "Received message with subject: %s, message: %s", event.subject, event.message
@@ -31,6 +31,6 @@ def proxy(api_version, function_name):
     print(app.current_request.raw_body)
     print(app.current_request.headers)
     with Client(app) as client:
-        res = client.http.get("/")
+        res = client.http.get("/xyz")
 
     return Response(res.body, status_code=res.status_code, headers=res.headers)
