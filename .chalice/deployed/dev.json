@@ -1,0 +1,36 @@
+{
+  "resources": [
+    {
+      "name": "default-role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::000000000000:role/dream-dev",
+      "role_name": "dream-dev"
+    },
+    {
+      "name": "handle_sns_message",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:dream-dev-handle_sns_message"
+    },
+    {
+      "name": "handle_sns_message-sns-subscription",
+      "resource_type": "sns_event",
+      "topic": "audit-log",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:dream-dev-handle_sns_message",
+      "subscription_arn": "arn:aws:sns:us-east-1:000000000000:audit-log:f0aae086-fca6-4cb2-8643-f77ff2204d1b",
+      "topic_arn": "arn:aws:sns:us-east-1:000000000000:audit-log"
+    },
+    {
+      "name": "api_handler",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:dream-dev"
+    },
+    {
+      "name": "rest_api",
+      "resource_type": "rest_api",
+      "rest_api_id": "960yowaqgu",
+      "rest_api_url": "https://960yowaqgu.execute-api.us-east-1.amazonaws.com/api/"
+    }
+  ],
+  "schema_version": "2.0",
+  "backend": "api"
+}

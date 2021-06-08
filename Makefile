@@ -2,7 +2,7 @@ build:
 	docker-compose build --build-arg USER_ID=$$(id -u) --build-arg GROUP_ID=$$(id -g)
 
 dev:
-	docker-compose run --service-ports app
+	docker-compose run --service-ports --publish app
 
 test: migrate
 	docker-compose run app pytest 
