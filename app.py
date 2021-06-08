@@ -30,7 +30,8 @@ def proxy(api_version, function_name):
     print("local lambda proxy", api_version, function_name)
     print(app.current_request.raw_body)
     print(app.current_request.headers)
-    with Client(app) as client:
-        res = client.http.get("/xyz")
+    #  with Client(app) as client:
+    #  res = client.http.get("/xyz")
 
-    return Response(res.body, status_code=res.status_code, headers=res.headers)
+    return {"hello": "world"}
+    # return Response(res.body, status_code=res.status_code, headers=res.headers)

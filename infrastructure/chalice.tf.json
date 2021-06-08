@@ -85,9 +85,7 @@
           "video/webm"
         ],
         "endpoint_configuration": {
-          "types": [
-            "EDGE"
-          ]
+          "types": ["EDGE"]
         }
       }
     },
@@ -108,9 +106,6 @@
   "provider": {
     "template": {
       "version": "~> 2"
-    },
-    "aws": {
-      "version": ">= 2, < 4"
     },
     "null": {
       "version": "~> 2"
