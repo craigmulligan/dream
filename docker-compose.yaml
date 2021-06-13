@@ -9,12 +9,9 @@ services:
     depends_on:
       - db
       - rds
-      - localstack
     volumes:
       - ${HOME}/.aws/config:/home/user/.aws/config
       - ${PWD}/:/home/user/app
-    environment:
-      LOCALSTACK_HOST: localstack
   rds:
     image: koxudaxi/local-data-api
     restart: always
@@ -33,18 +30,3 @@ services:
       POSTGRES_DB: test
     ports:
       - 5432:5432
-  localstack:
-    image: localstack/localstack:0.12.12
-    ports:
-      - 4566:4566
-    environment:
-      SERVICES: sqs,s3,cloudwatch,lambda,logs,iam,apigateway,sns
-      EDGE_PORT: 4566
-      AWS_DEFAULT_REGION: us-east-1
-      DEBUG: 1
-      DATA_DIR: /tmp/localstack
-      LAMBDA_FORWARD_URL: http://app
-      LAMBDA_FALLBACK_URL: http://app
-    volumes:
-      - "/tmp/.localstack:/tmp/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
