@@ -1,4 +1,4 @@
-from models import User
+from chalicelib.models import User
 import json
 
 

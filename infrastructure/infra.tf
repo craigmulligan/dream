@@ -18,9 +18,25 @@ provider "aws" {
         iam   = "http://localstack:4566"
         apigateway = "http://localstack:4566"
         sns = "http://localstack:4566"
+        rds = "http://localstack:4566"
     }
 }
 
 resource "aws_sns_topic" "audit_log" {
   name = "audit-log"
+}
+
+resource "aws_rds_cluster_instance" "cluster_instances" {
+  count              = 1
+  identifier         = "aurora-cluster-app-${count.index}"
+  cluster_identifier = aws_rds_cluster.default.id
+  instance_class     = "db.r4.small"
+  engine             = "aurora-postgresql"
+}
+
+resource "aws_rds_cluster" "default" {
+  cluster_identifier = "aurora-cluster"
+  database_name      = "app_db"
+  master_username    = "app_user"
+  master_password    = "app_pass"
 }
