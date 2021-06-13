@@ -18,7 +18,6 @@ greenlet==1.1.0
 iniconfig==1.1.1
 inquirer==2.7.0
 jmespath==0.10.0
-localstack-client==1.20
 Mako==1.1.4
 MarkupSafe==2.0.1
 marshmallow==3.12.1
