@@ -15,6 +15,9 @@ USER user
 
 EXPOSE 8000
 
+RUN echo $USER_ID
+RUN echo $GROUP_ID
+
 RUN mkdir -p /home/user/.pytest/cache
 
 ENV VIRTUAL_ENV=/home/user/venv
