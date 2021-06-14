@@ -7,10 +7,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump UID & GID
-        run: |
-          echo User ID [UID]: $(id -u)
-          echo Group ID [GID]: $(id -g)
       - uses: actions/checkout@v2
       - run: ./task build
       - run: ./task fmt --check
