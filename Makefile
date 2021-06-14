@@ -22,17 +22,8 @@ migrate:
 fmt:
 	docker-compose run app black .
 
-local:
-	docker-compose run app chalice-local deploy
-
-invoke:
-	awslocal lambda invoke --function-name dream-dev --payload "{}" out.txt
-
-setup:
-	awslocal sns create-topic --name MyDemoTopic
+fmt_check:
+	docker-compose run app black . --check
 
 package:
 	chalice-local package --pkg-format terraform infrastructure
-
-terraform_apply: package
-	docker-compose run app terraform apply
