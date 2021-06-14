@@ -10,8 +10,11 @@ services:
       - db
       - rds
     volumes:
-      - ${HOME}/.aws/config:/home/user/.aws/config
       - ${PWD}/:/home/user/app
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-test}
   rds:
     image: koxudaxi/local-data-api
     restart: always
