@@ -1,9 +1,18 @@
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, Integer 
+from sqlalchemy_utils import EmailType, PasswordType, Timestamp, force_auto_coercion
 from .base import Base
 
 
-class User(Base):
+force_auto_coercion()
+
+class User(Base, Timestamp):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(), default=None)
-    created_at = Column(DateTime, default=None)
+    email = Column(EmailType)
+    password = Column(PasswordType(schemes=[
+            'bcrypt',
+        ]), nullable=False)
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password 
