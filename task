@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -eo pipefail
+DOCKER_BUILDKIT=1
+
+# load env vars
+if [ -f .env ]
+then
+  export $(cat .env | sed 's/#.*//g' | xargs)
+fi
+
+function help() {
+echo
+echo "$1 <command>"
+echo
+echo "commands:"
+echo
+column -t -s"|" ./task.md | tail -n +3
+echo
+}
+
+function build() {
+  docker-compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
+}
+
+function migrate_generate() {
+  docker-compose run app alembic revision --autogenerate $*
+}
+
+function migrate() {
+  docker-compose run app alembic upgrade head
+}
+
+function test() {
+  docker-compose run app pytest $*
+}
+
+function test_watch() {
+  docker-compose run app ptw -- --testmon $*
+}
+
+
+function dev() {
+  docker-compose run --service-ports --publish app
+}
+
+function fmt() {
+  docker-compose run app black . $*
+}
+
+case "$1" in
+    build)
+        build 
+        ;;
+    dev)
+        dev
+        ;;
+    test)
+        migrate &&
+        test ${*:2}
+        ;;
+    test_watch)
+      migrate &&
+      test_watch ${*:2}
+      ;;
+    migrate)
+        migrate ${*:2}
+        ;;
+    fmt)
+      fmt ${*:2}
+      ;;
+    *)
+        help task
+        exit 1
+esac

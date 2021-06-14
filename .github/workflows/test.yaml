@@ -12,6 +12,6 @@ jobs:
           echo User ID [UID]: $(id -u)
           echo Group ID [GID]: $(id -g)
       - uses: actions/checkout@v2
-      - run: DOCKER_BUILDKIT=1 docker-compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
-      - run: make fmt_check
-      - run: make test
+      - run: ./task build
+      - run: ./task fmt --check
+      - run: ./task test
