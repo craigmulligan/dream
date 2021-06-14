@@ -1,5 +1,6 @@
 from .user import blueprint as user
 from .util import blueprint as util
+from .auth import blueprint as auth
 
 
 def register_blueprints(app):

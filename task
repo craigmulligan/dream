@@ -48,6 +48,10 @@ function fmt() {
   docker-compose run app black . $*
 }
 
+function run() {
+  docker-compose run app $*
+}
+
 case "$1" in
     build)
         build 
@@ -66,8 +70,14 @@ case "$1" in
     migrate)
         migrate ${*:2}
         ;;
+    migrate_generate)
+        migrate_generate ${*:2}
+        ;;
     fmt)
       fmt ${*:2}
+      ;;
+    run)
+      run ${*:2}
       ;;
     *)
         help task

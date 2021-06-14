@@ -13,19 +13,12 @@ def test_client():
 
 @fixture(scope="function")
 def session():
-    # https://stackoverflow.com/questions/53371410/sqlalchemy-session-management-in-test-agnostic-functions
     connection = engine.connect()
 
-    # begin a non-ORM transaction
     transaction = connection.begin()
 
-    # bind an individual Session to the connection
     with session_scope(bind=connection) as session:
-        ###    optional     ###
-        # if the database supports SAVEPOINT (SQLite needs special
-        # config for this to work), starting a savepoint
-        # will allow tests to also use rollback within tests
-        nested = connection.begin_nested()
+        connection.begin_nested()
 
         @listens_for(session, "after_transaction_end")
         def resetart_savepoint(sess, trans):
