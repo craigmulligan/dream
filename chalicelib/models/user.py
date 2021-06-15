@@ -3,13 +3,9 @@ from sqlalchemy_utils import (
     EmailType,
     PasswordType,
     Timestamp,
-    force_auto_coercion,
     generic_repr,
 )
 from .base import Base
-
-
-force_auto_coercion()
 
 
 @generic_repr
@@ -25,7 +21,3 @@ class User(Base, Timestamp):
         ),
         nullable=False,
     )
-
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
