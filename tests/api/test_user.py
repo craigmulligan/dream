@@ -11,4 +11,9 @@ def test_get_user(test_client, session):
     response = test_client.http.get(f"/user/{user.id}")
     payload = json.loads(response.body)
 
-    assert payload == {"id": user.id, "email": user.email, "created_at": user.created_at, "updated_at": user.updated_at}
+    assert payload == {
+        "id": user.id,
+        "email": user.email,
+        "created_at": user.created_at,
+        "updated_at": user.updated_at,
+    }
