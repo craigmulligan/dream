@@ -35,7 +35,7 @@ py==1.10.0
 pyasn1==0.4.8
 pycparser==2.20
 pydantic==1.4
-pydataapi==0.4.22
+pydataapi @ git+https://github.com/hobochild/py-data-api.git@3cd8b7b20ad238c87b02a2aed425aed595172b70
 pyparsing==2.4.7
 pytest==6.2.4
 pytest-testmon==1.1.1
