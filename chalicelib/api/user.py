@@ -5,7 +5,6 @@ from chalicelib.database import session_scope
 
 blueprint = Blueprint(__name__)
 
-user_schema = UserSchema()
 
 
 @blueprint.route("/{user_id}", methods=["GET"])
