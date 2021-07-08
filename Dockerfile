@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:experimental
 FROM python:3.8.5
 
 ARG USER_ID
@@ -34,7 +35,7 @@ WORKDIR /home/user/app
 
 # Install dependencies:
 COPY requirements.txt .
-RUN --mount=type=cache,target=/root/.cache pip install -r requirements.txt
+RUN --mount=type=cache,mode=0755,target=/root/.cache/pip pip install -r requirements.txt
 
 COPY . .
 
