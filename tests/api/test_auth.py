@@ -3,7 +3,6 @@ from chalicelib.templates import templates
 from requests_toolbelt import MultipartEncoder
 
 
-
 def test_get_signin(test_client):
     # TODO should redirect
     template = templates.get_template("signin.html")
@@ -27,7 +26,11 @@ def test_signin_post(test_client, session):
     }
 
     form = MultipartEncoder(fields=data)
-    response = test_client.http.post(f"/auth/signin", body=form.to_string(), headers={"content-type": form.content_type})
+    response = test_client.http.post(
+        f"/auth/signin",
+        body=form.to_string(),
+        headers={"content-type": form.content_type},
+    )
 
     assert response.status_code == 200
     assert response.body.decode("utf-8") == template.render(user=user)

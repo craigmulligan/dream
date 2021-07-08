@@ -1,6 +1,7 @@
 from chalicelib.models import User
 import json
 
+
 def test_get_user(test_client, session):
     assert session.query(User).count() == 0
     user = User(email="x@x.com", password="1234")

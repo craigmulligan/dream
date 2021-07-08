@@ -7,7 +7,7 @@ def test_ping(test_client):
     """
     response = test_client.http.get("/util/ping")
     data = json.loads(response.body)
-    assert data["message"] == 'pong'
+    assert data["message"] == "pong"
 
 
 def test_not_found(test_client):
