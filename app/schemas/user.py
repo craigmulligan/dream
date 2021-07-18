@@ -1,4 +1,4 @@
-from chalicelib.models import User
+from lib.models import User
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 

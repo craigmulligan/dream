@@ -1,7 +1,7 @@
 import app
 from pytest import fixture
 from chalice.test import Client
-from chalicelib.database import session_scope, engine
+from app.database import session_scope, engine
 from sqlalchemy.event import listens_for
 
 

@@ -1,9 +1,10 @@
 from chalice import Blueprint
-from chalicelib.models import User
-from chalicelib.schemas import UserSchema
-from chalicelib.database import session_scope
+from lib.models import User
+from lib.schemas import UserSchema
+from lib.database import session_scope
 
 blueprint = Blueprint(__name__)
+user_schema = UserSchema()
 
 
 @blueprint.route("/{user_id}", methods=["GET"])
