@@ -60,11 +60,9 @@ case "$1" in
         dev
         ;;
     test)
-        migrate &&
         test ${*:2}
         ;;
     test_watch)
-      migrate &&
       test_watch ${*:2}
       ;;
     migrate)

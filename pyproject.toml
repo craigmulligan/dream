@@ -1,2 +1,33 @@
 [tool.pytest.ini_options]
 cache_dir="/home/user/.pytest/cache"
+
+[tool.poetry]
+name = "dream"
+version = "0.1.0"
+description = ""
+authors = ["Craig Mulligan <hey@hobochild.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask-Migrate="*"
+Flask-Script="*"
+Flask-SQLAlchemy="*"
+Flask="*"
+requests="*"
+requests-toolbelt="*"
+SQLAlchemy-Utils="*"
+gunicorn="*"
+passlib = "^1.7.4"
+psycopg2 = "^2.9.1"
+pytest-flask = "^1.2.0"
+bcrypt = "^3.2.0"
+
+[tool.poetry.dev-dependencies]
+pytest="*"
+pytest-testmon="*"
+pytest-watch="*"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

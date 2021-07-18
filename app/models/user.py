@@ -5,11 +5,11 @@ from sqlalchemy_utils import (
     Timestamp,
     generic_repr,
 )
-from .base import Base
+from app.database import db
 
 
 @generic_repr
-class User(Base, Timestamp):
+class User(db.Model, Timestamp):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(EmailType)
