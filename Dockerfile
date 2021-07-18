@@ -34,4 +34,4 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache poetry install
 
 COPY . .
 
-# CMD ["gunicorn run:app"]
+CMD ["gunicorn run:app"]
