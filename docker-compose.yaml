@@ -2,16 +2,27 @@ version: "3.1"
 
 services:
   app:
-    ports:
-      - 8080:8080
+    image: dream-app:latest
     build:
       context: .
+    ports:
+      - 8080:8080
     depends_on:
       - postgres
+      - worker
     volumes:
       - ${PWD}/:/home/user/app
     environment:
+      FLASK_ENV: development
+      DEBUG: "True" 
       DATABASE_URL: postgresql://${PGUSER:-user}:${PGPASSWORD:-pass}@postgres:5432/${PGDATABASE:-hp}
+
+  worker:
+    image: dream-app:latest
+    entrypoint: /bin/bash ./worker.sh
+    environment:
+      DATABASE_URL: postgresql://${PGUSER:-user}:${PGPASSWORD:-pass}@postgres:5432/${PGDATABASE:-hp}
+
   postgres:
     image: postgres:13
     ports:

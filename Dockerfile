@@ -32,4 +32,4 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache poetry install
 
 COPY . .
 
-CMD ["bash", "./start.sh"]
+CMD ["bash", "./server.sh"]
