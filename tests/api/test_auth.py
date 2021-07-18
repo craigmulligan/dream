@@ -1,5 +1,5 @@
-from chalicelib.models import User
-from chalicelib.templates import templates
+from app.models import User
+from app.templates import templates
 from requests_toolbelt import MultipartEncoder
 
 
