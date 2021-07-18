@@ -5,14 +5,12 @@ ARG USER_ID
 ARG GROUP_ID
 
 # Avoid file permission issues for container user files that are written to host volume.
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+RUN if [ -z "$GROUP_ID" ] ; then echo Argument not provided ; else addgroup --gid $GROUP_ID user ; fi
+RUN if [ -z "$GROUP_ID" ] ; then adduser --disabled-password --gecos '' user; else adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user; fi
+
 USER user
 
 EXPOSE 8080
-
-RUN echo $USER_ID
-RUN echo $GROUP_ID
 
 RUN mkdir -p /home/user/.pytest/cache
 
@@ -34,4 +32,4 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache poetry install
 
 COPY . .
 
-CMD ["gunicorn run:app"]
+CMD ["bash", "./start.sh"]

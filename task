@@ -24,11 +24,11 @@ function build() {
 }
 
 function migrate_generate() {
-  docker-compose run app alembic revision --autogenerate $*
+  docker-compose run app flask db migrate $*
 }
 
 function migrate() {
-  docker-compose run app alembic upgrade head
+  docker-compose run app flask db upgrade
 }
 
 function test() {
@@ -41,7 +41,7 @@ function test_watch() {
 
 
 function dev() {
-  docker-compose run --service-ports --publish app
+  docker-compose up
 }
 
 function fmt() {
