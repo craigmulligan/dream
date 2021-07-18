@@ -22,7 +22,7 @@ def app(request):
         drop_database(TEST_DATABASE_URI)
 
     create_database(TEST_DATABASE_URI)
-    app = create_app("config")
+    app = create_app()
 
     # Establish an application context before running the tests.
     ctx = app.app_context()
