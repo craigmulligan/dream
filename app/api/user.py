@@ -1,14 +1,10 @@
-from chalice import Blueprint
-from lib.models import User
-from lib.schemas import UserSchema
-from lib.database import session_scope
+from flask import Blueprint, render_template
+from app.models import User
 
-blueprint = Blueprint(__name__)
-user_schema = UserSchema()
+blueprint = Blueprint("user", __name__)
 
 
-@blueprint.route("/{user_id}", methods=["GET"])
+@blueprint.route("/<string:user_id>", methods=["GET"])
 def get_user(user_id):
-    with session_scope() as session:
-        user = session.query(User).filter_by(id=user_id).first()
-        return user_schema.dump(user)
+    user = User.query.filter_by(id=user_id).first()
+    return render_template("home.html", user=user)

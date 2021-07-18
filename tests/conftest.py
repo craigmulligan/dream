@@ -1,33 +1,58 @@
-import app
+import os
+from sqlalchemy_utils.functions import drop_database, create_database, database_exists
+from app import create_app
+import pytest
 from pytest import fixture
-from chalice.test import Client
-from app.database import session_scope, engine
-from sqlalchemy.event import listens_for
+from flask_migrate import Migrate, upgrade
+
+from app.database import db as _db
+from tests.transaction_manager import TransactionManager
+
+TEST_DATABASE_URI = os.environ["DATABASE_URL"] + "_test"
 
 
-@fixture
-def test_client():
-    with Client(app.app) as client:
-        yield client
+@pytest.fixture(scope="session")
+def app(request):
+    """Session-wide test `Flask` application."""
+    settings_override = {
+        "SQLALCHEMY_DATABASE_URI": TEST_DATABASE_URI,
+    }
+
+    if database_exists(TEST_DATABASE_URI):
+        drop_database(TEST_DATABASE_URI)
+
+    create_database(TEST_DATABASE_URI)
+    app = create_app("config")
+
+    # Establish an application context before running the tests.
+    ctx = app.app_context()
+    ctx.push()
+
+    def teardown():
+        ctx.pop()
+
+    request.addfinalizer(teardown)
+    return app
 
 
-@fixture(scope="function")
-def session():
-    connection = engine.connect()
+@pytest.fixture(scope="session", autouse=True)
+def db(app, request):
+    """Session-wide test database."""
 
-    transaction = connection.begin()
+    _db.app = app
 
-    with session_scope(bind=connection) as session:
-        connection.begin_nested()
+    # Apply migrations to the database
+    Migrate(app, _db)
+    upgrade()
 
-        @listens_for(session, "after_transaction_end")
-        def resetart_savepoint(sess, trans):
-            if trans.nested and not trans._parent.nested:
-                session.expire_all()
-                session.begin_nested()
+    return _db
 
-        yield session
 
-        session.close()
-        transaction.rollback()
-        connection.close()
+@pytest.fixture(scope="function", autouse=True)
+def transact(request, db, app):
+    trans_manager = TransactionManager(db, app)
+    trans_manager._start_transaction()
+
+    yield
+
+    trans_manager._close_transaction()

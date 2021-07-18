@@ -1,20 +1,16 @@
 from app.models import User
-import json
+from app.database import db
+from flask import render_template
 
 
-def test_get_user(test_client, session):
-    assert session.query(User).count() == 0
+def test_get_user(client, app):
+    for rule in app.url_map.iter_rules():
+        print(rule)
+    assert User.query.count() == 0
     user = User(email="x@x.com", password="1234")
-    session.add(user)
-    session.commit()
+    db.session.add(user)
+    db.session.commit()
 
-    response = test_client.http.get(f"/user/{user.id}")
-    payload = json.loads(response.body)
-
+    response = client.get(f"/user/{user.id}")
     assert response.status_code == 200
-    assert payload == {
-        "id": user.id,
-        "email": user.email,
-        "created_at": user.created_at,
-        "updated_at": user.updated_at,
-    }
+    assert render_template("home.html", user=user) == response.data.decode("utf-8")
