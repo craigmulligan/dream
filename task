@@ -41,7 +41,7 @@ function test_watch() {
 
 
 function dev() {
-  docker-compose up
+  docker-compose run --service-ports app flask run --host 0.0.0.0 --port 8080
 }
 
 function fmt() {
