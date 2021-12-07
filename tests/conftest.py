@@ -8,7 +8,12 @@ from flask_migrate import Migrate, upgrade
 from app.database import db as _db
 from tests.transaction_manager import TransactionManager
 
-TEST_DATABASE_URI = os.environ["DATABASE_URL"] + "_test"
+PGUSER = os.environ.get("PGUSER", "user")
+PGPASSWORD = os.environ.get("PGPASSWORD", "pass")
+PGDATABASE = os.environ.get("PGDATABASE", "hp")
+
+DATABASE_URL=f"postgresql://{PGUSER}:{PGPASSWORD}@postgres:5432/{PGDATABASE}"
+TEST_DATABASE_URI = DATABASE_URL + "_test"
 
 
 @pytest.fixture(scope="session")
