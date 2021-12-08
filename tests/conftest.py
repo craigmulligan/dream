@@ -8,26 +8,17 @@ from flask_migrate import Migrate, upgrade
 from app.database import db as _db
 from tests.transaction_manager import TransactionManager
 
-PGUSER = os.environ.get("PGUSER", "user")
-PGPASSWORD = os.environ.get("PGPASSWORD", "pass")
-PGDATABASE = os.environ.get("PGDATABASE", "hp")
-
-DATABASE_URL=f"postgresql://{PGUSER}:{PGPASSWORD}@postgres:5432/{PGDATABASE}"
-TEST_DATABASE_URI = DATABASE_URL + "_test"
-
-
 @pytest.fixture(scope="session")
 def app(request):
     """Session-wide test `Flask` application."""
-    settings_override = {
-        "SQLALCHEMY_DATABASE_URI": TEST_DATABASE_URI,
-    }
+    app = create_app()
+
+    TEST_DATABASE_URI = app.config["DATABASE_URL"] + "_test"
 
     if database_exists(TEST_DATABASE_URI):
         drop_database(TEST_DATABASE_URI)
 
     create_database(TEST_DATABASE_URI)
-    app = create_app()
 
     # Establish an application context before running the tests.
     ctx = app.app_context()
