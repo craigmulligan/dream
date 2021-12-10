@@ -35,7 +35,7 @@ def run_server():
 
 @dev.command("worker")
 def run_worker():
-    run_sh("celery --app run_app:celery worker --without-gossip", env={"CELERYD_HIJACK_ROOT_LOGGER": "False"})
+    run_sh("watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app run_app:celery worker --without-gossip")
 
 def register_cli(app, db):
     app.cli.add_command(dev)
