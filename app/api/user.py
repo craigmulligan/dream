@@ -7,6 +7,7 @@ blueprint = Blueprint("user", __name__)
 
 @blueprint.route("/<string:user_id>", methods=["GET"])
 def get_user(user_id):
+    audit_log.delay("user_view", user_id)
     user = User.query.filter_by(id=user_id).first()
     return render_template("home.html", user=user)
 
