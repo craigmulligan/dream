@@ -1,7 +1,8 @@
 from flask import Flask
 
 from app.api import register_blueprints
-from app.database import db, migrate, celery
+from app.database import db, celery
+from app.cli import register_cli
 
 
 def create_app():
@@ -10,7 +11,7 @@ def create_app():
 
     db.init_app(app)
     celery.init_app(app)
-    migrate.init_app(app, db)
     register_blueprints(app)
+    register_cli(app, db)
 
     return app
