@@ -1,4 +1,4 @@
-from celery import Celery
+from celery import Celery, signals
 
 class FlaskCelery(Celery):
     def __init__(self):
@@ -17,3 +17,12 @@ class FlaskCelery(Celery):
 
         app.celery = self
         return self
+
+
+@signals.setup_logging.connect
+def setup_celery_logging(**_):
+    """
+        This is to override celeries logging hijack. 
+        see: https://github.com/celery/celery/issues/2509#issuecomment-153936466
+    """
+    pass
