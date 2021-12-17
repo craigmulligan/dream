@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ./task build
-      - run: ./task fmt --check
-      - run: ./task test
+      - run: poetry install
+      - run: poetry run flask dev db
+      - run: poetry run flask dev fmt --check
+      - run: poetry run flask dev test
