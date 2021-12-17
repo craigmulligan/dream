@@ -1,15 +1,17 @@
-from celery import Celery, signals
+from celery import Celery, signals, Task
 
 
 class FlaskCelery(Celery):
     def __init__(self):
-        super().__init__(__name__)
+        super().__init__()
 
     def init_app(self, app):
-        self.conf.broker_url = app.config["CELERY_BROKER_URL"]
-        self.conf.result_backend = app.config["CELERY_RESULT_BACKEND"]
+        self.conf.update({
+            "broker_url": app.config["CELERY_BROKER_URL"],
+            "result_backend": app.config["CELERY_RESULT_BACKEND"]
+        })
 
-        class ContextTask(self.Task):
+        class ContextTask(Task):
             def __call__(self, *args, **kwargs):
                 with app.app_context():
                     return self.run(*args, **kwargs)
