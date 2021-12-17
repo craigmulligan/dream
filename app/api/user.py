@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from app.models import User
-from app.tasks.audit import audit_log 
+from app.tasks.audit import audit_log
 
 blueprint = Blueprint("user", __name__)
 

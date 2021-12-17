@@ -19,7 +19,9 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-config.set_main_option("sqlalchemy.url", current_app.config.get("SQLALCHEMY_DATABASE_URI"))
+config.set_main_option(
+    "sqlalchemy.url", current_app.config.get("SQLALCHEMY_DATABASE_URI")
+)
 target_metadata = current_app.extensions["migrate"].db.metadata
 
 

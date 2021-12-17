@@ -1,5 +1,5 @@
 from app import create_app
-import logging 
+import logging
 
 
 logging.basicConfig(level=logging.INFO)

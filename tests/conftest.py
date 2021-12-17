@@ -8,6 +8,7 @@ from flask_migrate import Migrate, upgrade
 from app.database import db as _db
 from tests.transaction_manager import TransactionManager
 
+
 @pytest.fixture(scope="session")
 def app(request):
     """Session-wide test `Flask` application."""
