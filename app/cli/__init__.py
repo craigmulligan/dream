@@ -53,6 +53,9 @@ def run_fmt(check: bool):
 
     run_sh("black . --check")
 
+@dev.command("mypy")
+def run_mypy():
+    run_sh("mypy .")
 
 def register_cli(app, db):
     app.cli.add_command(dev)
