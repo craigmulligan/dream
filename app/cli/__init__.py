@@ -14,7 +14,7 @@ def run_sh(cmd: str, env=None):
 
     if env:
         copied_env.update(env)
-    subprocess.call(shlex.split(cmd), env=copied_env)
+    subprocess.check_call(shlex.split(cmd), env=copied_env)
 
 
 @dev.command("test")
@@ -56,7 +56,7 @@ def run_fmt(check: bool):
 
 @dev.command("mypy")
 def run_mypy():
-    run_sh("mypy app")
+    run_sh("mypy app tests")
 
 
 def register_cli(app, db):
