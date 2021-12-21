@@ -310,6 +310,26 @@ Flask = ">=0.10"
 SQLAlchemy = ">=0.8.0"
 
 [[package]]
+name = "flask-sqlalchemy-stubs"
+version = "0.0.1"
+description = "Stubs for flask-sqlalchemy"
+category = "dev"
+optional = false
+python-versions = "^3.6"
+develop = false
+
+[package.dependencies]
+flask-sqlalchemy = "^2.4.4"
+mypy = "^0.920"
+sqlalchemy-stubs = "^0.4"
+
+[package.source]
+type = "git"
+url = "https://github.com/hobochild/flask-sqlalchemy-stubs.git"
+reference = "master"
+resolved_reference = "eea33a7e2681887090ff9c8c777c100024a04c6f"
+
+[[package]]
 name = "greenlet"
 version = "1.1.2"
 description = "Lightweight in-process concurrent programming"
@@ -720,8 +740,20 @@ pymysql = ["pymysql (<1)", "pymysql"]
 sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
+name = "sqlalchemy-stubs"
+version = "0.4"
+description = "SQLAlchemy stubs and mypy plugin"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+mypy = ">=0.790"
+typing-extensions = ">=3.7.4"
+
+[[package]]
 name = "sqlalchemy-utils"
-version = "0.38.0"
+version = "0.38.1"
 description = "Various utility functions for SQLAlchemy."
 category = "main"
 optional = false
@@ -838,7 +870,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ae98d3c12aeb1727bf2e56568df3da1d939cffda94888fa6bae612e9d916c803"
+content-hash = "ae74636f09141e6e3b120743b8e47cbe3266def15c61320e6417bec18392a5e3"
 
 [metadata.files]
 alembic = [
@@ -1025,6 +1057,7 @@ flask-sqlalchemy = [
     {file = "Flask-SQLAlchemy-2.5.1.tar.gz", hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912"},
     {file = "Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl", hash = "sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390"},
 ]
+flask-sqlalchemy-stubs = []
 greenlet = [
     {file = "greenlet-1.1.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:58df5c2a0e293bf665a51f8a100d3e9956febfbf1d9aaf8c0677cf70218910c6"},
     {file = "greenlet-1.1.2-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:aec52725173bd3a7b56fe91bc56eccb26fbdff1386ef123abb63c84c5b43b63a"},
@@ -1322,9 +1355,13 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.4.28-cp39-cp39-win_amd64.whl", hash = "sha256:853de08e881dae0305647dd61b4429758f11d1bf02a9faf02793cad44bb2e0d5"},
     {file = "SQLAlchemy-1.4.28.tar.gz", hash = "sha256:7fdb7b775fb0739d3e71461509f978beb788935bc0aa9e47df14837cb33e5226"},
 ]
+sqlalchemy-stubs = [
+    {file = "sqlalchemy-stubs-0.4.tar.gz", hash = "sha256:c665d6dd4482ef642f01027fa06c3d5e91befabb219dc71fc2a09e7d7695f7ae"},
+    {file = "sqlalchemy_stubs-0.4-py3-none-any.whl", hash = "sha256:5eec7aa110adf9b957b631799a72fef396b23ff99fe296df726645d01e312aa5"},
+]
 sqlalchemy-utils = [
-    {file = "SQLAlchemy-Utils-0.38.0.tar.gz", hash = "sha256:8ed14babfd05c40884d416cf7719c92cec390bb8ee9e5c4a3eb8e603e15fe784"},
-    {file = "SQLAlchemy_Utils-0.38.0-py3-none-any.whl", hash = "sha256:72b00a99941c376e03e4b4dd4df128b8237b1fc4f36601ab116ceab18cb22e1b"},
+    {file = "SQLAlchemy-Utils-0.38.1.tar.gz", hash = "sha256:7bed3396f4103dc8663f05751065284c2e3d529f20ebd4a80847e1281fccb1fe"},
+    {file = "SQLAlchemy_Utils-0.38.1-py3-none-any.whl", hash = "sha256:a484ccfdc7f9298df49d2558a5309691e5e3e51c815a23a33b3355989176cb3e"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

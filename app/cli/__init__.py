@@ -14,7 +14,8 @@ def run_sh(cmd: str, env=None):
 
     if env:
         copied_env.update(env)
-    subprocess.check_call(shlex.split(cmd), env=copied_env)
+    ret = subprocess.call(shlex.split(cmd), env=copied_env)
+    exit(ret)
 
 
 @dev.command("test")
@@ -22,7 +23,6 @@ def run_sh(cmd: str, env=None):
 def test_watch(watch: bool):
     if watch:
         run_sh(f"ptw -- --testmon")
-        return
 
     run_sh(f"pytest")
 
@@ -49,7 +49,6 @@ def run_worker():
 def run_fmt(check: bool):
     if check:
         run_sh("black . --check")
-        return
 
     run_sh("black .")
 
