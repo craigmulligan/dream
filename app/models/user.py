@@ -4,7 +4,7 @@ from sqlalchemy_utils import (
     PasswordType,
     Timestamp,
 )
-from app.database import BaseModel 
+from app.database import BaseModel
 
 
 class User(BaseModel, Timestamp):
