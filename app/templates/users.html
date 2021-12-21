@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2>All users</h2>
-{%- for line in users %}
+{%- for user in users %}
 <h3>hi {{user.email}}</h3>
 {% endfor %}
 {% endblock %}
