@@ -14,7 +14,7 @@ def app(request):
     """Session-wide test `Flask` application."""
     app = create_app()
 
-    TEST_DATABASE_URI = app.config["DATABASE_URL"] + "_test"
+    TEST_DATABASE_URI = app.config["DATABASE_URL"]
 
     if database_exists(TEST_DATABASE_URI):
         drop_database(TEST_DATABASE_URI)
@@ -33,7 +33,7 @@ def app(request):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def db(app, request):
+def db(app):
     """Session-wide test database."""
 
     _db.app = app
