@@ -6,10 +6,12 @@ class FlaskCelery(Celery):
         super().__init__()
 
     def init_app(self, app):
-        self.conf.update({
-            "broker_url": app.config["CELERY_BROKER_URL"],
-            "result_backend": app.config["CELERY_RESULT_BACKEND"]
-        })
+        self.conf.update(
+            {
+                "broker_url": app.config["CELERY_BROKER_URL"],
+                "result_backend": app.config["CELERY_RESULT_BACKEND"],
+            }
+        )
 
         class ContextTask(Task):
             def __call__(self, *args, **kwargs):

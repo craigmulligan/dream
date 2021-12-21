@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: abatilo/actions-poetry@v2.0.0
       - run: poetry install
       - run: poetry run flask dev db
       - run: poetry run flask dev fmt --check
+      - run: poetry run flask dev mypy 
       - run: poetry run flask dev test

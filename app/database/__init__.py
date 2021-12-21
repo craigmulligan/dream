@@ -8,6 +8,7 @@ db = SQLAlchemy()
 if TYPE_CHECKING:
     # This is needed for the flasksqlamypy plugin.
     from flask_sqlalchemy.model import Model
+
     BaseModel = db.make_declarative_base(Model)
 else:
     BaseModel = db.Model

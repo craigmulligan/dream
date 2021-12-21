@@ -48,14 +48,16 @@ def run_worker():
 @click.option("--check", default=False, is_flag=True)
 def run_fmt(check: bool):
     if check:
-        run_sh("black .")
+        run_sh("black . --check")
         return
 
-    run_sh("black . --check")
+    run_sh("black .")
+
 
 @dev.command("mypy")
 def run_mypy():
     run_sh("mypy app")
+
 
 def register_cli(app, db):
     app.cli.add_command(dev)
