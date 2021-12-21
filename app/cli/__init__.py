@@ -56,7 +56,7 @@ def run_fmt(check: bool):
 
 @dev.command("mypy")
 def run_mypy():
-    run_sh("mypy app tests")
+    run_sh("mypy .")
 
 
 def register_cli(app, db):

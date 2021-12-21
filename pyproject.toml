@@ -33,6 +33,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 plugins = "flasksqlamypy"
+exclude = "venv" 
 
 [[tool.mypy.overrides]]
 module="flask_migrate,celery,sqlalchemy_utils.*"
