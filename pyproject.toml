@@ -13,10 +13,9 @@ Flask="*"
 requests="*"
 SQLAlchemy-Utils="*"
 gunicorn="*"
-bcrypt = "*"
 celery = "*"
-passlib = "^1.7.4"
 psycopg2 = "^2.9.2"
+itsdangerous = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest="*"

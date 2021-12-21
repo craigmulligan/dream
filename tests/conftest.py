@@ -1,10 +1,10 @@
 import os
-from sqlalchemy_utils.functions import drop_database, create_database, database_exists
-from app import create_app
 import pytest
-from pytest import fixture
+
+from sqlalchemy_utils.functions import drop_database, create_database, database_exists
 from flask_migrate import Migrate, upgrade
 
+from app import create_app
 from app.database import db as _db
 from tests.transaction_manager import TransactionManager
 
@@ -14,12 +14,12 @@ def app(request):
     """Session-wide test `Flask` application."""
     app = create_app()
 
-    TEST_DATABASE_URI = app.config["DATABASE_URL"]
+    test_database_uri = app.config["DATABASE_URL"]
 
-    if database_exists(TEST_DATABASE_URI):
-        drop_database(TEST_DATABASE_URI)
+    if database_exists(test_database_uri):
+        drop_database(test_database_uri)
 
-    create_database(TEST_DATABASE_URI)
+    create_database(test_database_uri)
 
     # Establish an application context before running the tests.
     ctx = app.app_context()
@@ -46,7 +46,7 @@ def db(app):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def transact(request, db, app):
+def transact(db, app):
     trans_manager = TransactionManager(db, app)
     trans_manager._start_transaction()
 

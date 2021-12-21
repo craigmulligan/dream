@@ -27,9 +27,6 @@ def upgrade():
         sa.Column(
             "email", sqlalchemy_utils.types.email.EmailType(length=255), nullable=True
         ),
-        sa.Column(
-            "password", sqlalchemy_utils.types.password.PasswordType(), nullable=False
-        ),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###
