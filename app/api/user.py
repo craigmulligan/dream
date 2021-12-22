@@ -15,11 +15,7 @@ def get_user(user_id):
     if not user:
         abort(404)
 
+    if not user.can_view():
+        abort(403)
+
     return render_template("user.html", user=user)
-
-
-@blueprint.route("/", methods=["GET"])
-def get_users():
-    audit_log.delay("users_view", "xyz")
-    users = User.query.limit(10).all()
-    return render_template("users.html", users=users)
