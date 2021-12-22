@@ -20,11 +20,19 @@ def run_sh(cmd: str, env=None):
 
 @dev.command("test")
 @click.option("--watch", default=False, is_flag=True)
-def test_watch(watch: bool):
+@click.option("--k", default=None)
+def test_watch(watch: bool, k: str):
     if watch:
-        run_sh(f"ptw -- --testmon")
+        cmd = f"ptw -- --testmon"
+        if k:
+            cmd = f"ptw -- --testmon -k {k}"
+        run_sh(cmd)
 
-    run_sh(f"pytest")
+    cmd = f"pytest"
+    if k:
+        cmd = f"ptw -- --testmon -k {k}"
+
+    run_sh(cmd)
 
 
 @dev.command("db")

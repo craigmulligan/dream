@@ -67,7 +67,7 @@ def dummy_user(db):
     util function to create a test case user.
     """
 
-    def create_dummy_user(email="x@x.com"):
+    def create_dummy_user(email="x@x.com") -> User:
         user = User(email=email)
         db.session.add(user)
         db.session.commit()
