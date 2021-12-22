@@ -7,8 +7,6 @@ from app import create_app
 from app.database import db as _db
 from app.models import User
 
-from tests.transaction_manager import TransactionManager
-
 
 @pytest.fixture(scope="session")
 def app(request):
@@ -37,10 +35,6 @@ def app(request):
 @pytest.fixture(scope="session", autouse=True)
 def db(app):
     """Session-wide test database."""
-
-    _db.app = app
-
-    # Apply migrations to the database
     Migrate(app, _db)
     upgrade()
 
@@ -48,13 +42,23 @@ def db(app):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def transact(db, app):
-    trans_manager = TransactionManager(db, app)
-    trans_manager._start_transaction()
+def session(app, db, request):
+    """Creates a new database session for a test."""
+    connection = db.engine.connect()
+    transaction = connection.begin()
 
-    yield
+    options = dict(bind=connection, binds={})
+    session = db.create_scoped_session(options=options)
 
-    trans_manager._close_transaction()
+    db.session = session
+
+    def teardown():
+        transaction.rollback()
+        connection.close()
+        session.remove()
+
+    request.addfinalizer(teardown)
+    return session
 
 
 @pytest.fixture(scope="function")

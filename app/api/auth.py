@@ -11,6 +11,7 @@ from flask import (
 from markupsafe import Markup
 from app.models import User
 from app.database import db
+from app.utils import is_dev
 
 blueprint = Blueprint("auth", __name__)
 
@@ -34,7 +35,7 @@ def magic_post():
 
     token = user.get_sigin_token()
 
-    if current_app.config["ENV"] == "development":
+    if is_dev():
         magic_link = Markup(
             f"<a href='magic?token={token}'>here is your magic link</a>"
         )

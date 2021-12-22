@@ -5,7 +5,7 @@ from sqlalchemy_utils import (
 )
 from app.database import BaseModel
 from itsdangerous import URLSafeSerializer
-from flask import current_app
+from flask import current_app, session
 
 
 class User(BaseModel, Timestamp):
@@ -14,10 +14,15 @@ class User(BaseModel, Timestamp):
     email = Column(EmailType)
 
     def get_sigin_token(self):
+        """Used for magic links"""
         signer = URLSafeSerializer(current_app.config["SECRET_KEY"], salt="signin")
         return signer.dumps(self.id)
 
     @staticmethod
-    def verify_sigin_token(token):
+    def verify_sigin_token(token: str):
+        """Verify token - used for magic links"""
         signer = URLSafeSerializer(current_app.config["SECRET_KEY"], salt="signin")
         return signer.loads(token)
+
+    def can_view(self):
+        return session["user_id"] == self.id
