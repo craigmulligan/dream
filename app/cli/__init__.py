@@ -9,6 +9,18 @@ dev = AppGroup("dev")
 migrate = Migrate()
 
 
+def flags_to_str(**kwargs) -> str:
+    flag_str = ""
+    for key, value in kwargs.items():
+        if value:
+            if isinstance(value, bool):
+                flag_str = flag_str + f" -{key}"
+            else:
+                flag_str = flag_str + f" -{key}={value}"
+
+    return flag_str
+
+
 def run_sh(cmd: str, env=None):
     copied_env = os.environ.copy()
 
@@ -19,20 +31,15 @@ def run_sh(cmd: str, env=None):
 
 
 @dev.command("test")
-@click.option("--watch", default=False, is_flag=True)
-@click.option("--k", default=None)
-def test_watch(watch: bool, k: str):
+@click.option("--watch", default=False, is_flag=True, help="watch mode")
+@click.argument("pytest_options", nargs=-1, type=click.UNPROCESSED)
+def test(watch: bool, rest):
+    pytest_flags = " ".join(rest)
+
     if watch:
-        cmd = f"ptw -- --testmon"
-        if k:
-            cmd = f"ptw -- --testmon -k {k}"
-        run_sh(cmd)
+        run_sh(f"ptw -- --testmon {pytest_flags}")
 
-    cmd = f"pytest"
-    if k:
-        cmd = f"ptw -- --testmon -k {k}"
-
-    run_sh(cmd)
+    run_sh(f"pytest {pytest_flags}")
 
 
 @dev.command("db")
@@ -53,12 +60,10 @@ def run_worker():
 
 
 @dev.command("fmt")
-@click.option("--check", default=False, is_flag=True)
-def run_fmt(check: bool):
-    if check:
-        run_sh("black . --check")
-
-    run_sh("black .")
+@click.argument("black_options", nargs=-1, type=click.UNPROCESSED)
+def run_fmt(black_options):
+    black_flags = " ".join(black_options)
+    run_sh(f"black . {black_flags}")
 
 
 @dev.command("mypy")
