@@ -21,8 +21,8 @@ def run_sh(cmd: str, env=None):
 @dev.command("test")
 @click.option("--watch", default=False, is_flag=True, help="watch mode")
 @click.argument("pytest_options", nargs=-1, type=click.UNPROCESSED)
-def test(watch: bool, rest):
-    pytest_flags = " ".join(rest)
+def test(watch: bool, pytest_options):
+    pytest_flags = " ".join(pytest_options)
 
     if watch:
         run_sh(f"ptw -- --testmon {pytest_flags}")
