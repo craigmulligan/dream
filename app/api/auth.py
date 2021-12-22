@@ -3,15 +3,17 @@ from flask import (
     render_template,
     request,
     flash,
-    current_app,
     session,
     redirect,
     url_for,
+    abort,
 )
 from markupsafe import Markup
 from app.models import User
 from app.database import db
 from app.utils import is_dev
+from itsdangerous import BadSignature
+
 
 blueprint = Blueprint("auth", __name__)
 
@@ -24,16 +26,24 @@ def signin_get():
 @blueprint.route("/magic", methods=["POST"])
 def magic_post():
     email = request.form["email"]
+
+    if not email:
+        abort(400)
+
     user = User.query.filter_by(email=email).one_or_none()
     token = None
 
     if not user:
         # create the user.
-        user = User(email=email)
+        try:
+            user = User(email=email)
+        except ValueError as e:
+            abort(400, str(e))
+
         db.session.add(user)
         db.session.commit()
 
-    token = user.get_sigin_token()
+    token = user.get_signin_token()
 
     if is_dev():
         magic_link = Markup(
@@ -50,7 +60,14 @@ def magic_post():
 @blueprint.route("/magic", methods=["GET"])
 def magic_get():
     token = request.args.get("token")
-    user_id = User.verify_sigin_token(token)
-    session["user_id"] = user_id
+    if not token:
+        abort(400)
+
+    try:
+        user_id = User.verify_signin_token(token)
+        session["user_id"] = user_id
+    except BadSignature:
+        abort(403)
+
     flash("You are now signed in.")
     return redirect(url_for("user.get_user", user_id=user_id))

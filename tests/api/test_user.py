@@ -5,7 +5,6 @@ def test_get_user_authenticated(client, dummy_user, signin_user):
     """
     Asserts user page is correctly rendered.
     """
-
     user = dummy_user()
     signin_user(user)
 
