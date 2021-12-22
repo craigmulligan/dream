@@ -42,7 +42,7 @@ def db(app):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def session(app, db, request):
+def session(db, request):
     """Creates a new database session for a test."""
     connection = db.engine.connect()
     transaction = connection.begin()
