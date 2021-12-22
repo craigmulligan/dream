@@ -18,4 +18,8 @@ jobs:
       - run: poetry run flask dev db
       - run: poetry run flask dev fmt -- --check
       - run: poetry run flask dev mypy
-      - run: poetry run flask dev test -- --cov=app
+      - run: poetry run flask dev test -- --cov=app --cov-report xml
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          filename: coverage.xml
