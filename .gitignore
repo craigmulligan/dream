@@ -7,3 +7,4 @@ __pycache__
 infrastructure/.terraform/
 infrastructure/*.zip
 venv
+.coverage
