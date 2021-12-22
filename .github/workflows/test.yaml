@@ -23,3 +23,6 @@ jobs:
         uses: irongut/CodeCoverageSummary@v1.2.0
         with:
           filename: coverage.xml
+          badge: true
+          format: 'markdown'
+          output: 'both'
