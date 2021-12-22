@@ -9,18 +9,6 @@ dev = AppGroup("dev")
 migrate = Migrate()
 
 
-def flags_to_str(**kwargs) -> str:
-    flag_str = ""
-    for key, value in kwargs.items():
-        if value:
-            if isinstance(value, bool):
-                flag_str = flag_str + f" -{key}"
-            else:
-                flag_str = flag_str + f" -{key}={value}"
-
-    return flag_str
-
-
 def run_sh(cmd: str, env=None):
     copied_env = os.environ.copy()
 
