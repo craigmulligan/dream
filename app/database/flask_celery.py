@@ -8,8 +8,8 @@ class FlaskCelery(Celery):
     def init_app(self, app):
         self.conf.update(
             {
-                "broker_url": app.config["CELERY_BROKER_URL"],
-                "result_backend": app.config["CELERY_RESULT_BACKEND"],
+                "broker_url": "sqla+" + app.config["SQLALCHEMY_DATABASE_URI"],
+                "result_backend": "db+" + app.config["SQLALCHEMY_DATABASE_URI"],
             }
         )
 

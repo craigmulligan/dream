@@ -11,6 +11,7 @@ from flask import (
 from markupsafe import Markup
 from app.models import User
 from app.database import db
+from app.mail import mail_manager
 from app.utils import is_dev
 from itsdangerous import BadSignature
 
@@ -51,8 +52,7 @@ def magic_post():
         )
         flash(magic_link)
     else:
-        # if prod we email.
-        pass
+        mail_manager.send(user.email, "Magic Link", "<a href='magic?token={token}'>here is your magic link</a>")
 
     return render_template("magic.html")
 

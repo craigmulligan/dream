@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import Mock
 
 from sqlalchemy_utils.functions import drop_database, create_database, database_exists
 from flask_migrate import Migrate, upgrade
@@ -6,14 +7,17 @@ from flask_migrate import Migrate, upgrade
 from app import create_app
 from app.database import db as _db
 from app.models import User
+from config import SQLALCHEMY_DATABASE_URI
 
 
 @pytest.fixture(scope="session")
 def app(request):
     """Session-wide test `Flask` application."""
-    app = create_app()
-
-    test_database_uri = app.config["DATABASE_URL"]
+    # Suffix the db name with test for tests.
+    test_database_uri = SQLALCHEMY_DATABASE_URI + "_test"
+    app = create_app({
+        "SQLALCHEMY_DATABASE_URI": test_database_uri 
+    })
 
     if database_exists(test_database_uri):
         drop_database(test_database_uri)
@@ -87,3 +91,8 @@ def signin_user(client):
             session["user_id"] = user.id
 
     return login
+
+
+@pytest.fixture(scope="function")
+def dummy_mail_manager():
+    return Mock()
