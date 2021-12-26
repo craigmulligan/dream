@@ -1,30 +1,37 @@
 import smtplib, ssl
+from email.message import Message
+
 
 class MailManagerNotConfigured(Exception):
     pass
 
-class MailManager():
+
+class MailManager:
     def init_app(self, app):
-        self.email_from = app.config.get("MAIL_FROM")
         self.host = app.config.get("MAIL_HOST")
         self.port = int(app.config.get("MAIL_PORT", 465))
         self.password = app.config.get("MAIL_PASSWORD")
+        self.username = app.config.get("MAIL_USERNAME")
+        self._from = app.config.get("MAIL_FROM")
         app.mail_manager = self
 
     def send(self, to, subject, body):
-        if None in (self.email_from, self.host, self.port, self.password):
-            raise MailManagerNotConfigured("Ensure you have configured all the required MAIL_* environment variables.")
+        print(self._from, self.host, self.port, self.password)
+        if None in (self._from, self.host, self.port, self.password, self.username):
+            raise MailManagerNotConfigured(
+                "Ensure you have configured all the required MAIL_* environment variables."
+            )
 
-        message = f"Subject: {subject}\n\n{body}"
+        message = Message()
+        message.add_header("from", self._from)
+        message.add_header("to", to)
+        message.add_header("subject", subject)
+        message.set_payload(body)
 
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", self.port, context=context) as server:
-            server.login(self.email_from, self.password)
-            server.sendmail(
-                self.email_from,
-                to,
-                message,
-            )
+        with smtplib.SMTP_SSL(self.host, self.port, context=context) as server:
+            server.login(self.username, self.password)
+            server.sendmail(self._from, to, message.as_string())
 
 
 mail_manager = MailManager()
