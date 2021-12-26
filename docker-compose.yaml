@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   postgres:
+    container_name: postgres
     network_mode: host
     image: postgres:13
     environment:

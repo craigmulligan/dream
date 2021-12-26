@@ -9,6 +9,7 @@ from app.mail import mail_manager, MailManager
 
 class FlaskApp(Flask):
     """Custom flask app with extensions"""
+
     celery: Type[FlaskCelery]
     mail_manager: MailManager
 

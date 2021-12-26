@@ -52,7 +52,8 @@ def magic_post():
         )
         flash(magic_link)
     else:
-        mail_manager.send(user.email, "Magic Link", "<a href='magic?token={token}'>here is your magic link</a>")
+        pass
+        # TODO send async email
 
     return render_template("magic.html")
 

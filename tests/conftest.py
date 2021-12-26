@@ -15,9 +15,7 @@ def app(request):
     """Session-wide test `Flask` application."""
     # Suffix the db name with test for tests.
     test_database_uri = SQLALCHEMY_DATABASE_URI + "_test"
-    app = create_app({
-        "SQLALCHEMY_DATABASE_URI": test_database_uri 
-    })
+    app = create_app({"SQLALCHEMY_DATABASE_URI": test_database_uri})
 
     if database_exists(test_database_uri):
         drop_database(test_database_uri)
