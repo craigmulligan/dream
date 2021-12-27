@@ -15,7 +15,7 @@ poetry install
 # Run db.
 
 ```
-flask dev db 
+flask dev db && flask db upgrade
 ```
 
 # Run test suite. 
@@ -26,6 +26,12 @@ flask dev test
 # Run test suite in watch mode.
 ```
 flask dev test --watch
+```
+
+# Run dev server and worker
+
+```
+flask dev run
 ```
 
 # Run dev server 
@@ -58,11 +64,9 @@ My dream app setup:
 Tools:
 
 * docker
-* python
-* hotwire
+* flask 
 * sqlalchemy
-* marshmallow (Anything better?)
-* jinja
-* black formatter
+* hotwire / htmx
+* black
 * mypy
 * fly
