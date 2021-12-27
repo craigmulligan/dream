@@ -39,7 +39,6 @@ def test_post_magic_bad_email(client, dummy_user, signin_user, app):
     Asserts user can't signin by submitting an invalid email
     """
     user = dummy_user()
-    signin_user(user)
 
     response = client.post(
         f"/auth/magic",
@@ -86,4 +85,20 @@ def test_get_magic_fail(client, dummy_user):
     # in dev mode we send the token to the client.
     # check we don't accidently do that here.
     assert response.status_code == 403
+    assert not session.get("user_id")
+
+
+def test_get_logout(client, dummy_user, signin_user):
+    """
+    Asserts the logout link works correctly
+    """
+    user = dummy_user()
+    signin_user(user)
+
+    response = client.get("/", follow_redirects=True)
+    assert render_template("user.html", user=user) == response.data.decode("utf-8")
+    assert session.get("user_id")
+
+    response = client.get(f"/auth/logout", follow_redirects=True)
+    assert render_template("signin.html") == response.data.decode("utf-8")
     assert not session.get("user_id")
