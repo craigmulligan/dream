@@ -16,7 +16,6 @@ class MailManager:
         app.mail_manager = self
 
     def send(self, to, subject, body):
-        print(self._from, self.host, self.port, self.password)
         if None in (self._from, self.host, self.port, self.password, self.username):
             raise MailManagerNotConfigured(
                 "Ensure you have configured all the required MAIL_* environment variables."
@@ -26,6 +25,8 @@ class MailManager:
         message.add_header("from", self._from)
         message.add_header("to", to)
         message.add_header("subject", subject)
+        # Always send html emails.
+        message.add_header("Content-Type", "text/html")
         message.set_payload(body)
 
         context = ssl.create_default_context()

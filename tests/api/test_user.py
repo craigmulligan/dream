@@ -1,7 +1,7 @@
 from flask import render_template, session
 
 
-def test_get_user_authenticated(client, dummy_user, signin_user):
+def test_user_get_authenticated(client, dummy_user, signin_user):
     """
     Asserts user page is correctly rendered.
     """
@@ -13,7 +13,7 @@ def test_get_user_authenticated(client, dummy_user, signin_user):
     assert render_template("user.html", user=user) == response.data.decode("utf-8")
 
 
-def test_get_user_forbidden(client, dummy_user, signin_user):
+def test_user_get_forbidden(client, dummy_user, signin_user):
     """
     Asserts a user can not view another user page.
     """
@@ -25,7 +25,7 @@ def test_get_user_forbidden(client, dummy_user, signin_user):
     assert response.status_code == 403
 
 
-def test_get_user_does_not_exist(client, dummy_user, signin_user):
+def test_user_get_does_not_exist(client, dummy_user, signin_user):
     """
     Asserts a 404 is returned for a non-existent user.
     """
@@ -36,7 +36,7 @@ def test_get_user_does_not_exist(client, dummy_user, signin_user):
     assert response.status_code == 404
 
 
-def test_get_user_unauthenticated(client, dummy_user):
+def test_user_get_unauthenticated(client, dummy_user):
     """
     Asserts if the requestor is not logged in
     they are redirected to the signin page.

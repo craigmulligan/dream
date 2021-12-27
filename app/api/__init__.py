@@ -14,7 +14,8 @@ def register_blueprints(app):
 
     @app.route("/")
     def _():
+        print(session)
         if session.get("user_id"):
-            redirect(url_for("user.get_user", user_id=session["user_id"]))
+            return redirect(url_for("user.user_get", user_id=session["user_id"]))
 
         return redirect(url_for("auth.signin_get"))

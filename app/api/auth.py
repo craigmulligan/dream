@@ -7,6 +7,7 @@ from flask import (
     redirect,
     url_for,
     abort,
+    current_app,
 )
 from markupsafe import Markup
 from app.models import User
@@ -44,8 +45,11 @@ def magic_post():
         db.session.add(user)
         db.session.commit()
 
+    host_url = current_app.config["HOST_URL"]
     token = user.get_signin_token()
-    magic_link = Markup(f"<a href='magic?token={token}'>here is your magic link</a>")
+    magic_link = Markup(
+        f"<a href='{host_url}/auth/magic?token={token}'>Click here to signin.</a>"
+    )
 
     if is_dev():
         flash(magic_link)
@@ -68,4 +72,11 @@ def magic_get():
         abort(403)
 
     flash("You are now signed in.")
-    return redirect(url_for("user.get_user", user_id=user_id))
+    return redirect(url_for("user.user_get", user_id=user_id))
+
+
+@blueprint.route("/logout", methods=["GET"])
+def logout_get():
+    del session["user_id"]
+    flash("You are now logged out.")
+    return redirect(url_for("_"))

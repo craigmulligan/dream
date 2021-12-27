@@ -7,7 +7,7 @@ blueprint = Blueprint("user", __name__)
 
 @blueprint.route("/<int:user_id>", methods=["GET"])
 @authenticated_resource
-def get_user(user_id):
+def user_get(user_id):
     user = User.query.filter_by(id=user_id).one_or_none()
 
     if not user:
