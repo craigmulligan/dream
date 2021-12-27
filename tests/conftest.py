@@ -96,6 +96,7 @@ def signin_user(client):
 def dummy_mail_manager(app):
     """
     We never want to send real emails in our test suite.
+    This replaces it with a Mock so you can assert it was called.
     """
 
     dummy_mail_manager = Mock()
