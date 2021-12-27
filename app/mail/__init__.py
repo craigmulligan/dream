@@ -1,5 +1,6 @@
 import smtplib, ssl
 from email.message import Message
+import logging
 
 
 class MailManagerNotConfigured(Exception):
@@ -20,6 +21,8 @@ class MailManager:
             raise MailManagerNotConfigured(
                 "Ensure you have configured all the required MAIL_* environment variables."
             )
+
+        logging.info(f"Sending email via {self.host} - {self.username}")
 
         message = Message()
         message.add_header("from", self._from)
