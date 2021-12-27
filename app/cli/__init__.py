@@ -18,7 +18,7 @@ def run_sh(cmd: str, env=None, popen=False):
     args = shlex.split(cmd)
 
     if popen:
-        return subprocess.Popen(args)
+        return subprocess.Popen(args, env=copied_env)
 
     ret = subprocess.call(args, env=copied_env)
     exit(ret)
@@ -52,6 +52,7 @@ def run_server(popen=False):
 def run_worker(popen=False):
     return run_sh(
         "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app run_app:celery worker --without-gossip",
+        env={"FLASK_ENV": "development"},
         popen=popen,
     )
 
