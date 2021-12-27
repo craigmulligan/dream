@@ -9,7 +9,7 @@ def test_get_sigin_page(client):
     assert render_template("signin.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_success(client, dummy_user, signin_user):
+def test_post_magic_success(client, dummy_user, signin_user, app):
     """
     Asserts user can request signin email by submitting email to /auth/magic
     """
@@ -17,9 +17,14 @@ def test_post_magic_success(client, dummy_user, signin_user):
     signin_user(user)
     token = user.get_signin_token()
 
-    # TODO assert email.send called with token link.
     response = client.post(
         f"/auth/magic", content_type="multipart/form-data", data=dict(email="x@x.com")
+    )
+
+    app.mail_manager.send.assert_called_once_with(
+        user.email,
+        "Signin link",
+        f"<a href='magic?token={token}'>here is your magic link</a>",
     )
 
     # in dev mode we send the token to the client.
@@ -28,14 +33,13 @@ def test_post_magic_success(client, dummy_user, signin_user):
     assert render_template("magic.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_bad_email(client, dummy_user, signin_user):
+def test_post_magic_bad_email(client, dummy_user, signin_user, app):
     """
     Asserts user can't signin by submitting an invalid email
     """
     user = dummy_user()
     signin_user(user)
 
-    # TODO assert email.send called with token link.
     response = client.post(
         f"/auth/magic",
         content_type="multipart/form-data",
@@ -44,6 +48,7 @@ def test_post_magic_bad_email(client, dummy_user, signin_user):
 
     assert response.status_code == 400
     assert "Invalid Email" in response.data.decode("utf-8")
+    app.mail_manager.send.assert_not_called()
 
 
 def test_get_magic_success(client, dummy_user):

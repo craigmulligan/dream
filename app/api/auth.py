@@ -11,8 +11,8 @@ from flask import (
 from markupsafe import Markup
 from app.models import User
 from app.database import db
-from app.mail import mail_manager
 from app.utils import is_dev
+from app.tasks import email_send
 from itsdangerous import BadSignature
 
 
@@ -45,15 +45,12 @@ def magic_post():
         db.session.commit()
 
     token = user.get_signin_token()
+    magic_link = Markup(f"<a href='magic?token={token}'>here is your magic link</a>")
 
     if is_dev():
-        magic_link = Markup(
-            f"<a href='magic?token={token}'>here is your magic link</a>"
-        )
         flash(magic_link)
     else:
-        pass
-        # TODO send async email
+        email_send.delay(user.email, "Signin link", str(magic_link))
 
     return render_template("magic.html")
 

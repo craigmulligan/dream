@@ -8,6 +8,7 @@ from app import create_app
 from app.database import db as _db
 from app.models import User
 from config import SQLALCHEMY_DATABASE_URI
+from celery import Task
 
 
 @pytest.fixture(scope="session")
@@ -91,6 +92,21 @@ def signin_user(client):
     return login
 
 
-@pytest.fixture(scope="function")
-def dummy_mail_manager():
-    return Mock()
+@pytest.fixture(scope="function", autouse=True)
+def dummy_mail_manager(app):
+    """
+    We never want to send real emails in our test suite.
+    """
+
+    dummy_mail_manager = Mock()
+    app.mail_manager = dummy_mail_manager
+
+
+@pytest.fixture(scope="function", autouse=True)
+def monkey_patch_celery_async(monkeypatch):
+    """
+    This ensures that celery tasks are called locally
+    so you can assert their results within the test
+    without running the worker.
+    """
+    monkeypatch.setattr("celery.Task.apply_async", Task.apply)
