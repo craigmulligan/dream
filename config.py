@@ -9,7 +9,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 PGUSER = os.environ.get("PGUSER", "user")
 PGPASSWORD = os.environ.get("PGPASSWORD", "pass")
 PGDATABASE = os.environ.get("PGDATABASE", "hp")
-SQLALCHEMY_DATABASE_URI = (
+DATABASE_URL = os.environ.get("PGDATABASE", "hp")
+SQLALCHEMY_DATABASE_URI = DATABASE_URL or (
     f"postgresql://{PGUSER}:{PGPASSWORD}@localhost:5432/{PGDATABASE}"
 )
 

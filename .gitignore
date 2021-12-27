@@ -9,4 +9,4 @@ infrastructure/*.zip
 venv
 coverage.xml
 .coverage
-.env
+*.env
