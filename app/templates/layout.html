@@ -13,6 +13,9 @@
   </head>
   <body>
     <div class="container">
+      {% if session['user_id'] %}
+      <a href={{url_for('auth.logout_get')}}>Logout</a> 
+      {% endif %}
       <br>
       {% with messages = get_flashed_messages() %}
         {% if messages %}

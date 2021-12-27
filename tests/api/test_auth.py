@@ -20,11 +20,12 @@ def test_post_magic_success(client, dummy_user, signin_user, app):
     response = client.post(
         f"/auth/magic", content_type="multipart/form-data", data=dict(email="x@x.com")
     )
+    host_url = app.config["HOST_URL"]
 
     app.mail_manager.send.assert_called_once_with(
         user.email,
         "Signin link",
-        f"<a href='magic?token={token}'>here is your magic link</a>",
+        f"<a href='{host_url}/auth/magic?token={token}'>Click here to signin.</a>",
     )
 
     # in dev mode we send the token to the client.
