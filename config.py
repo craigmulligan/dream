@@ -16,7 +16,7 @@ SQLALCHEMY_DATABASE_URI = (
 # Mail config
 MAIL_HOST = os.environ.get("MAIL_HOST")
 MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-MAIL_PORT = os.environ.get("MAIL_PORT")
+MAIL_PORT = int(os.environ.get("MAIL_PORT", 465))
 MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
 MAIL_FROM = os.environ.get("MAIL_FROM")
 

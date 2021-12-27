@@ -9,7 +9,7 @@ class MailManagerNotConfigured(Exception):
 class MailManager:
     def init_app(self, app):
         self.host = app.config.get("MAIL_HOST")
-        self.port = int(app.config.get("MAIL_PORT", 465))
+        self.port = app.config.get("MAIL_PORT")
         self.password = app.config.get("MAIL_PASSWORD")
         self.username = app.config.get("MAIL_USERNAME")
         self._from = app.config.get("MAIL_FROM")
