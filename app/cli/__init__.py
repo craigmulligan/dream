@@ -9,12 +9,18 @@ dev = AppGroup("dev")
 migrate = Migrate()
 
 
-def run_sh(cmd: str, env=None):
+def run_sh(cmd: str, env=None, popen=False):
     copied_env = os.environ.copy()
 
     if env:
         copied_env.update(env)
-    ret = subprocess.call(shlex.split(cmd), env=copied_env)
+
+    args = shlex.split(cmd)
+
+    if popen:
+        return subprocess.Popen(args)
+
+    ret = subprocess.call(args, env=copied_env)
     exit(ret)
 
 
@@ -35,16 +41,37 @@ def run_db():
     run_sh("docker-compose up -d")
 
 
+def run_server(popen=False):
+    return run_sh(
+        "flask run --host 0.0.0.0 --port 8080",
+        env={"FLASK_ENV": "development"},
+        popen=popen,
+    )
+
+
+def run_worker(popen=False):
+    return run_sh(
+        "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app run_app:celery worker --without-gossip",
+        popen=popen,
+    )
+
+
 @dev.command("server")
-def run_server():
-    run_sh("flask run --host 0.0.0.0 --port 8080", env={"FLASK_ENV": "development"})
+def run_server_command():
+    return run_server()
 
 
 @dev.command("worker")
-def run_worker():
-    run_sh(
-        "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app run_app:celery worker --without-gossip"
-    )
+def run_worker_command():
+    return run_worker()
+
+
+@dev.command("run")
+def run_all():
+    """Run both the worker and dev server"""
+    procs = [run_worker(popen=True), run_server(popen=True)]
+    for p in procs:
+        p.wait()
 
 
 @dev.command("fmt")
