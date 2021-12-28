@@ -11,6 +11,9 @@ kill_timeout = 5
   allowed_public_ports = []
   auto_rollback = true
 
+[deploy]
+  release_command = "flask db upgrade"
+
 [[services]]
   http_checks = []
   internal_port = 8080

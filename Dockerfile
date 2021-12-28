@@ -6,7 +6,6 @@ WORKDIR /home/user/app
 
 RUN pip install --quiet --progress-bar off poetry==1.1.7
 
-# Install dependencies:
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry config virtualenvs.create false
