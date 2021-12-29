@@ -25,4 +25,4 @@ MAIL_FROM = os.environ.get("MAIL_FROM")
 # Key used for signing.
 SECRET_KEY = "super-secret-key"
 # DNS name of the server.
-HOST_URL = "http://localhost:8080"
+HOST_URL = os.environ.get("HOST_URL", "http://localhost:8080") 
