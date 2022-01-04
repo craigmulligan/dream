@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 {{ error_message }}
-<h3>Signin</h3>
-<form method="POST" action="magic">
-  <input name="email" type="email"/>
+<header><h3>Use your email to signin.</h3></header>
+<form style="margin-top: 50px" method="POST" action="magic">
+    <input name="email" type="email" placeholder="you@email.com" />
+    <button>Sign in</button>
 </form>
 {% endblock %}
