@@ -796,6 +796,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "types-freezegun"
+version = "1.1.4"
+description = "Typing stubs for freezegun"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.0.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -872,7 +880,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "eb11fd2dfd9fa53b1fc7bc8a099d7e4f5dfb47250b2b85d76899bcbec47517d7"
+content-hash = "8981247e3f8998e9867983cf704f2ba62e098214b9af3ce20b686958aa472494"
 
 [metadata.files]
 alembic = [
@@ -1319,6 +1327,10 @@ toml = [
 tomli = [
     {file = "tomli-1.2.3-py3-none-any.whl", hash = "sha256:e3069e4be3ead9668e21cb9b074cd948f7b3113fd9c8bba083f48247aab8b11c"},
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
+]
+types-freezegun = [
+    {file = "types-freezegun-1.1.4.tar.gz", hash = "sha256:45f5f3e75546fbe05da2f19f769b2feb22f14c304f47f3f7ecbad633688302a1"},
+    {file = "types_freezegun-1.1.4-py3-none-any.whl", hash = "sha256:904d2f67c40dea853b382a452cf12163245907c746028819e03256e0f216718c"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
