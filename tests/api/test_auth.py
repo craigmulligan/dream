@@ -1,4 +1,6 @@
 from flask import render_template, session
+from freezegun import freeze_time
+from datetime import datetime, timedelta
 
 
 def test_get_sigin_page(client):
@@ -71,6 +73,27 @@ def test_get_magic_success(client, dummy_user):
     assert "You are now signed in." in response.data.decode("utf-8")
     # check the session holds the user_id
     assert session["user_id"] == user.id
+
+
+def test_get_magic_timeout(client, dummy_user):
+    """
+    Asserts user can signin by passing signin token as a query string.
+    """
+    user = dummy_user()
+    token = user.get_signin_token()
+    now = datetime.now()
+    hour_later = now + timedelta(hours=1)
+    # Check no user is signed in.
+    assert not session.get("user_id")
+
+    # TODO assert email.send called with token link.
+    with freeze_time(hour_later):
+        response = client.get(
+            f"/auth/magic", query_string=dict(token=token), follow_redirects=True
+        )
+        # Check that we don't allow this.
+        assert response.status_code == 403
+        assert not session.get("user_id")
 
 
 def test_get_magic_fail(client, dummy_user):

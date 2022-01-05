@@ -28,6 +28,7 @@ mypy = "^0.920"
 black = "^21.12b0"
 flask-sqlalchemy-stubs = {git = "https://github.com/hobochild/flask-sqlalchemy-stubs.git"}
 pytest-cov = "^3.0.0"
+freezegun = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -6,7 +6,7 @@ from sqlalchemy_utils import (
     Timestamp,
 )
 from app.database import BaseModel
-from itsdangerous import URLSafeSerializer
+from itsdangerous import URLSafeTimedSerializer
 from flask import current_app, session
 
 
@@ -15,17 +15,24 @@ class User(BaseModel, Timestamp):
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(EmailType)
     email_regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+    salt_signin = "signin"
 
-    def get_signin_token(self):
-        """Used for magic links"""
-        signer = URLSafeSerializer(current_app.config["SECRET_KEY"], salt="signin")
-        return signer.dumps(self.id)
+    @staticmethod
+    def _get_serializer(salt: str) -> URLSafeTimedSerializer:
+        """Gets a URLSafeSerializer"""
+        return URLSafeTimedSerializer(current_app.config["SECRET_KEY"], salt=salt)
 
     @staticmethod
     def verify_signin_token(token: str):
-        """Verify token - used for magic links"""
-        signer = URLSafeSerializer(current_app.config["SECRET_KEY"], salt="signin")
-        return signer.loads(token)
+        """
+        Verify token - used for magic links
+        with 30 min expiry.
+        """
+        return User._get_serializer(User.salt_signin).loads(token, max_age=30 * 60)
+
+    def get_signin_token(self):
+        """Used for magic links"""
+        return self._get_serializer(User.salt_signin).dumps(self.id)
 
     def can_view(self):
         return session["user_id"] == self.id
