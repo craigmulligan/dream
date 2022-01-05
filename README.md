@@ -1,3 +1,16 @@
+My dream app setup:
+
+Tools:
+
+* poetry
+* flask
+* sqlalchemy
+* celery
+* black
+* mypy
+* hotwire / htmx
+* fly
+
 Getting started
 
 # Init virtual-env.
@@ -58,15 +71,3 @@ flask dev mypy
 ```
 flask db migrate
 ```
-
-My dream app setup:
-
-Tools:
-
-* docker
-* flask 
-* sqlalchemy
-* hotwire / htmx
-* black
-* mypy
-* fly
