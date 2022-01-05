@@ -14,7 +14,7 @@ from app.models import User
 from app.database import db
 from app.utils import is_dev
 from app.tasks import email_send
-from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous import BadSignature
 
 
 blueprint = Blueprint("auth", __name__)
