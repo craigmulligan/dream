@@ -13,11 +13,17 @@ kill_timeout = 5
 [deploy]
   release_command = "flask db upgrade"
 
-[[statics]]
+[processes]
+  web = "gunicorn 'run_app:app' -b 0.0.0.0:8080"
+  worker = "celery --app 'run_app:celery' worker"
+
+[statics]
+  processes = ["web"] # this service only applies to the web block
   guest_path = "/home/user/app/app/static"
   url_prefix = "/static"
 
 [[services]]
+  processes = ["web"] # this service only applies to the web block
   http_checks = []
   internal_port = 8080
   protocol = "tcp"

@@ -12,5 +12,3 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev
 
 COPY . .
-
-CMD ["bash", "./start.sh"]

@@ -14,7 +14,7 @@ from app.models import User
 from app.database import db
 from app.utils import is_dev
 from app.tasks import email_send
-from itsdangerous import BadSignature
+from itsdangerous import BadSignature, SignatureExpired
 
 
 blueprint = Blueprint("auth", __name__)
@@ -68,6 +68,9 @@ def magic_get():
     try:
         user_id = User.verify_signin_token(token)
         session["user_id"] = user_id
+    except SignatureExpired:
+        abort(403, "Your link has expired")
+
     except BadSignature:
         abort(403)
 

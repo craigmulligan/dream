@@ -93,6 +93,7 @@ def test_get_magic_timeout(client, dummy_user):
         )
         # Check that we don't allow this.
         assert response.status_code == 403
+        assert "Your link has expired" in response.data.decode("utf-8")
         assert not session.get("user_id")
 
 
