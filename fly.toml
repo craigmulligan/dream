@@ -13,6 +13,10 @@ kill_timeout = 5
 [deploy]
   release_command = "flask db upgrade"
 
+[[statics]]
+  guest_path = "/home/user/app/app/static"
+  url_prefix = "/static"
+
 [[services]]
   http_checks = []
   internal_port = 8080
