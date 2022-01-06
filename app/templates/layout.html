@@ -4,15 +4,15 @@
     <title>Dream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
-    <link rel="stylesheet" href={{ url_for('static', filename='style.css') }}>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
     <section>
       {% if session['user_id'] %}
       <nav>
         <ul>
-          <li><a href={{url_for('user.user_get', user_id=session['user_id'])}}>Console</a> </li>
-          <li><a href={{url_for('auth.logout_get')}}>Logout</a> </li>
+          <li><a href="{{url_for('user.user_get', user_id=session['user_id'])}}">Console</a> </li>
+          <li><a href="{{url_for('auth.logout_get')}}">Logout</a> </li>
         </ul>
       </nav>
       {% endif %}
