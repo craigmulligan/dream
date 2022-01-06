@@ -1,6 +1,7 @@
-from flask import render_template, session
+from flask import render_template
 from freezegun import freeze_time
 from datetime import datetime, timedelta
+from app.session import session
 
 
 def test_get_sigin_page(client):
@@ -60,7 +61,7 @@ def test_get_magic_success(client, dummy_user):
     user = dummy_user()
     token = user.get_signin_token()
     # Check no user is signed in.
-    assert not session.get("user_id")
+    assert not session.is_authenticated()
 
     # TODO assert email.send called with token link.
     response = client.get(
@@ -72,7 +73,7 @@ def test_get_magic_success(client, dummy_user):
     assert response.status_code == 200
     assert "You are now signed in." in response.data.decode("utf-8")
     # check the session holds the user_id
-    assert session["user_id"] == user.id
+    assert session.get_authenticated_user_id() == user.id
 
 
 def test_get_magic_timeout(client, dummy_user):
@@ -84,7 +85,7 @@ def test_get_magic_timeout(client, dummy_user):
     now = datetime.now()
     hour_later = now + timedelta(hours=1)
     # Check no user is signed in.
-    assert not session.get("user_id")
+    assert not session.is_authenticated()
 
     # TODO assert email.send called with token link.
     with freeze_time(hour_later):
@@ -94,7 +95,7 @@ def test_get_magic_timeout(client, dummy_user):
         # Check that we don't allow this.
         assert response.status_code == 403
         assert "Your link has expired" in response.data.decode("utf-8")
-        assert not session.get("user_id")
+        assert not session.is_authenticated()
 
 
 def test_get_magic_fail(client, dummy_user):
@@ -103,13 +104,13 @@ def test_get_magic_fail(client, dummy_user):
     """
     user = dummy_user()
     bad_token = user.get_signin_token() + "xyz"
-    assert not session.get("user_id")
+    assert not session.is_authenticated()
     response = client.get(f"/auth/magic", query_string=dict(token=bad_token))
 
     # in dev mode we send the token to the client.
     # check we don't accidently do that here.
     assert response.status_code == 403
-    assert not session.get("user_id")
+    assert not session.is_authenticated()
 
 
 def test_get_logout(client, dummy_user, signin_user):
@@ -121,8 +122,8 @@ def test_get_logout(client, dummy_user, signin_user):
 
     response = client.get("/", follow_redirects=True)
     assert render_template("user.html", user=user) == response.data.decode("utf-8")
-    assert session.get("user_id")
+    assert session.is_authenticated()
 
     response = client.get(f"/auth/logout", follow_redirects=True)
     assert render_template("signin.html") == response.data.decode("utf-8")
-    assert not session.get("user_id")
+    assert not session.is_authenticated()

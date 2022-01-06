@@ -7,6 +7,7 @@ from flask_migrate import Migrate, upgrade
 from app import create_app
 from app.database import db as _db
 from app.models import User
+from app.session import session
 from config import SQLALCHEMY_DATABASE_URI
 from celery import Task
 
@@ -45,7 +46,7 @@ def db(app):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def session(db, request):
+def app_session(db, request):
     """Creates a new database session for a test."""
     connection = db.engine.connect()
     transaction = connection.begin()
@@ -84,10 +85,12 @@ def signin_user(client):
     """
     util function to create a test case user.
     """
-
     def login(user: User) -> None:
-        with client.session_transaction() as session:
-            session["user_id"] = user.id
+        with client.session_transaction() as sesh:
+            session.flask_session = sesh
+            session.signin(user)
+            session.flask_session = None 
+
 
     return login
 
