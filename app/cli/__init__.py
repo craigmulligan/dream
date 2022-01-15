@@ -33,6 +33,7 @@ def test(watch: bool, pytest_options):
     if watch:
         run_sh(f"ptw -- --testmon {pytest_flags}")
 
+    print(pytest_flags)
     run_sh(f"pytest {pytest_flags}")
 
 

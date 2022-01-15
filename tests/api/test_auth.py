@@ -2,6 +2,8 @@ from flask import render_template
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 from app.session import session
+from app.models import User
+from unittest.mock import patch
 
 
 def test_get_sigin_page(client):
@@ -10,6 +12,43 @@ def test_get_sigin_page(client):
     """
     response = client.get(f"/auth/signin")
     assert render_template("signin.html") == response.data.decode("utf-8")
+
+
+def test_post_magic_success_create_user(client):
+    """
+    Asserts user can request signin email by submitting email to /auth/magic
+    """
+    email = "x@x.com"
+    User.query.count() == 0
+    response = client.post(
+        f"/auth/magic", content_type="multipart/form-data", data=dict(email=email)
+    )
+    assert response.status_code == 200
+    assert User.query.filter_by(email=email).count() == 1
+
+
+def test_post_magic_success_in_dev_mode(client, dummy_user, signin, app):
+    """
+    Asserts user can request signin email by submitting email to /auth/magic
+    And that in dev mode we render the link to the flash message & DONT
+    send a email.
+    """
+    user = dummy_user()
+    signin(user)
+    token = user.get_signin_token()
+
+    with patch.dict(app.config, {"ENV": "development"}):
+        response = client.post(
+            f"/auth/magic",
+            content_type="multipart/form-data",
+            data=dict(email="x@x.com"),
+        )
+        app.mail_manager.send.assert_not_called()
+
+        # in dev mode we send the token to the client.
+        # check we don't accidently do that here.
+        assert token in response.data.decode("utf-8")
+        assert render_template("magic.html") == response.data.decode("utf-8")
 
 
 def test_post_magic_success(client, dummy_user, signin, app):
@@ -37,12 +76,10 @@ def test_post_magic_success(client, dummy_user, signin, app):
     assert render_template("magic.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_bad_email(client, dummy_user, signin, app):
+def test_post_magic_bad_email(client, app):
     """
     Asserts user can't signin by submitting an invalid email
     """
-    user = dummy_user()
-
     response = client.post(
         f"/auth/magic",
         content_type="multipart/form-data",
@@ -51,6 +88,23 @@ def test_post_magic_bad_email(client, dummy_user, signin, app):
 
     assert response.status_code == 400
     assert "Invalid Email" in response.data.decode("utf-8")
+    app.mail_manager.send.assert_not_called()
+
+
+def test_post_magic_no_email(client, app):
+    """
+    Asserts user can't signin by submitting no email
+    """
+    response = client.post(
+        f"/auth/magic",
+        content_type="multipart/form-data",
+        data=dict(email=""),
+    )
+
+    assert response.status_code == 400
+    assert "An email address is required to request signin" in response.data.decode(
+        "utf-8"
+    )
     app.mail_manager.send.assert_not_called()
 
 
@@ -108,6 +162,18 @@ def test_get_magic_fail(client, dummy_user):
     # in dev mode we send the token to the client.
     # check we don't accidently do that here.
     assert response.status_code == 403
+    assert not session.is_authenticated()
+
+
+def test_get_magic_no_token(client, dummy_user):
+    """
+    Asserts user can't use a bad token to signin.
+    """
+    user = dummy_user()
+    assert not session.is_authenticated()
+    response = client.get(f"/auth/magic", query_string=dict(token=None))
+
+    assert response.status_code == 400
     assert not session.is_authenticated()
 
 

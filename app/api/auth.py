@@ -30,7 +30,7 @@ def magic_post():
     email = request.form["email"]
 
     if not email:
-        abort(400)
+        abort(400, "An email address is required to request signin")
 
     user = User.query.filter_by(email=email).one_or_none()
     token = None
@@ -63,7 +63,7 @@ def magic_post():
 def magic_get():
     token = request.args.get("token")
     if not token:
-        abort(400)
+        abort(400, "A token is required to signin")
 
     try:
         user_id = User.verify_signin_token(token)
