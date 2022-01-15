@@ -81,18 +81,18 @@ def dummy_user(db):
 
 
 @pytest.fixture(scope="function")
-def signin_user(client):
+def signin(client):
     """
     util function to create a test case user.
     """
-    def login(user: User) -> None:
+
+    def inner(user: User) -> None:
         with client.session_transaction() as sesh:
             session.flask_session = sesh
             session.signin(user)
-            session.flask_session = None 
+            session.flask_session = None
 
-
-    return login
+    return inner
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -104,6 +104,7 @@ def dummy_mail_manager(app):
 
     dummy_mail_manager = Mock()
     app.mail_manager = dummy_mail_manager
+    return dummy_mail_manager
 
 
 @pytest.fixture(scope="function", autouse=True)

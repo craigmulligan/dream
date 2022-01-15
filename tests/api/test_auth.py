@@ -12,12 +12,12 @@ def test_get_sigin_page(client):
     assert render_template("signin.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_success(client, dummy_user, signin_user, app):
+def test_post_magic_success(client, dummy_user, signin, app):
     """
     Asserts user can request signin email by submitting email to /auth/magic
     """
     user = dummy_user()
-    signin_user(user)
+    signin(user)
     token = user.get_signin_token()
 
     response = client.post(
@@ -37,7 +37,7 @@ def test_post_magic_success(client, dummy_user, signin_user, app):
     assert render_template("magic.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_bad_email(client, dummy_user, signin_user, app):
+def test_post_magic_bad_email(client, dummy_user, signin, app):
     """
     Asserts user can't signin by submitting an invalid email
     """
@@ -63,11 +63,9 @@ def test_get_magic_success(client, dummy_user):
     # Check no user is signed in.
     assert not session.is_authenticated()
 
-    # TODO assert email.send called with token link.
     response = client.get(
         f"/auth/magic", query_string=dict(token=token), follow_redirects=True
     )
-
     # in dev mode we send the token to the client.
     # check we don't accidently do that here.
     assert response.status_code == 200
@@ -113,12 +111,12 @@ def test_get_magic_fail(client, dummy_user):
     assert not session.is_authenticated()
 
 
-def test_get_logout(client, dummy_user, signin_user):
+def test_get_logout(client, dummy_user, signin):
     """
     Asserts the logout link works correctly
     """
     user = dummy_user()
-    signin_user(user)
+    signin(user)
 
     response = client.get("/", follow_redirects=True)
     assert render_template("user.html", user=user) == response.data.decode("utf-8")
