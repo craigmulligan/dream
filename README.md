@@ -1,4 +1,4 @@
-My dream app setup:
+A boring but dreamy setup. 
 
 Tools:
 
@@ -9,7 +9,7 @@ Tools:
 * black
 * mypy
 * hotwire / htmx
-* fly
+* fly.io
 
 Getting started
 
