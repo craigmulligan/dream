@@ -1,0 +1,2 @@
+[run]
+omit = tests/*,app/cli/*,app/templates/*,app/database/*,app/mail/*
