@@ -40,5 +40,5 @@ plugins = "flasksqlamypy"
 exclude = "venv"
 
 [[tool.mypy.overrides]]
-module = "flask_migrate,celery,sqlalchemy_utils.*"
+module = "flask_migrate,celery,sqlalchemy_utils.*,freezegun"
 ignore_missing_imports = true
