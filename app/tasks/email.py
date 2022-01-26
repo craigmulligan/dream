@@ -1,7 +1,7 @@
 import logging
 from app.database import celery
 from flask import current_app
-from app import FlaskApp
+from app.types import FlaskApp
 from typing import cast
 
 

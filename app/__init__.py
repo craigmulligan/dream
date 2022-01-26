@@ -5,13 +5,7 @@ from app.api import register_blueprints
 from app.database import db, celery, FlaskCelery
 from app.cli import register_cli
 from app.mail import mail_manager, MailManager
-
-
-class FlaskApp(Flask):
-    """Custom flask app with extensions"""
-
-    celery: Type[FlaskCelery]
-    mail_manager: MailManager
+from app.types import FlaskApp
 
 
 def create_app(settings=None):
