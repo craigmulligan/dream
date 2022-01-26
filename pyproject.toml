@@ -6,27 +6,27 @@ authors = ["Craig Mulligan <hey@hobochild.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-Flask-Migrate="*"
-Flask-Script="*"
-Flask-SQLAlchemy="*"
-Flask="*"
-requests="*"
-SQLAlchemy-Utils="*"
-gunicorn="*"
+Flask-Migrate = "*"
+Flask-Script = "*"
+Flask-SQLAlchemy = "*"
+Flask = "*"
+requests = "*"
+SQLAlchemy-Utils = "*"
+gunicorn = "*"
 celery = "*"
 psycopg2 = "^2.9.2"
 itsdangerous = "^2.0.1"
 python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
-pytest="*"
-pytest-testmon="*"
-pytest-watch="*"
+pytest = "*"
+pytest-testmon = "*"
+pytest-watch = "*"
 pytest-flask = "^1.2.0"
-watchdog = {extras = ["watchmedo"], version = "^2.1.6"}
+watchdog = { extras = ["watchmedo"], version = "^2.1.6" }
 mypy = "^0.920"
 black = "^21.12b0"
-flask-sqlalchemy-stubs = {git = "https://github.com/hobochild/flask-sqlalchemy-stubs.git"}
+flask-sqlalchemy-stubs = { git = "https://github.com/hobochild/flask-sqlalchemy-stubs.git" }
 pytest-cov = "^3.0.0"
 freezegun = "^1.1.0"
 types-freezegun = "^1.1.4"
@@ -37,8 +37,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 plugins = "flasksqlamypy"
-exclude = "venv" 
+exclude = "venv"
 
 [[tool.mypy.overrides]]
-module="flask_migrate,celery,sqlalchemy_utils.*"
+module = "flask_migrate,celery,sqlalchemy_utils.*"
 ignore_missing_imports = true
