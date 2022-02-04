@@ -1,4 +1,5 @@
-from flask import render_template, session
+from flask import render_template
+from app.models import User
 
 
 def test_user_get_authenticated(client, dummy_user, signin):
@@ -44,3 +45,17 @@ def test_user_get_unauthenticated(client, dummy_user):
     user = dummy_user()
     response = client.get(f"/user/{user.id}")
     assert response.status_code == 302
+
+
+def test_db_get_user_via_execute(client, dummy_user, db):
+    """
+    Asserts that querying via execute uses the test db transaction
+
+    """
+    dummy_user()
+
+    result = db.session.execute("select * from users;").all()
+    assert len(result) == 1
+
+    result = db.session.execute("delete from users;")
+    assert User.query.count() == 0
