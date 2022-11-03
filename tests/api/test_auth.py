@@ -6,6 +6,20 @@ from app.models import User
 from unittest.mock import patch
 
 
+def test_post_magic_success_create_user(client, db):
+    """
+    Asserts user can request signin email by submitting email to /auth/magic
+    """
+    email = "x@x.com"
+    assert not db.user_get_by_email(email)
+    response = client.post(
+        f"/auth/magic", content_type="multipart/form-data", data=dict(email=email)
+    )
+    assert response.status_code == 200
+    new_user = db.user_get_by_email(email)
+    assert new_user.email == email
+
+
 def test_get_sigin_page(client):
     """
     Asserts signin page is correctly rendered.
@@ -14,20 +28,9 @@ def test_get_sigin_page(client):
     assert render_template("signin.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_success_create_user(client):
-    """
-    Asserts user can request signin email by submitting email to /auth/magic
-    """
-    email = "x@x.com"
-    User.query.count() == 0
-    response = client.post(
-        f"/auth/magic", content_type="multipart/form-data", data=dict(email=email)
-    )
-    assert response.status_code == 200
-    assert User.query.filter_by(email=email).count() == 1
-
-
-def test_post_magic_success_in_dev_mode(client, dummy_user, signin, app):
+def test_post_magic_success_in_dev_mode(
+    client, dummy_user, signin, app, mail_manager_mock
+):
     """
     Asserts user can request signin email by submitting email to /auth/magic
     And that in dev mode we render the link to the flash message & DONT
@@ -37,13 +40,13 @@ def test_post_magic_success_in_dev_mode(client, dummy_user, signin, app):
     signin(user)
     token = user.get_signin_token()
 
-    with patch.dict(app.config, {"ENV": "development"}):
+    with patch.dict(app.config, {"DEBUG": "development"}):
         response = client.post(
             f"/auth/magic",
             content_type="multipart/form-data",
             data=dict(email="x@x.com"),
         )
-        app.mail_manager.send.assert_not_called()
+        mail_manager_mock.send.assert_not_called()
 
         # in dev mode we send the token to the client.
         # check we don't accidently do that here.
@@ -51,20 +54,22 @@ def test_post_magic_success_in_dev_mode(client, dummy_user, signin, app):
         assert render_template("magic.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_success(client, dummy_user, signin, app):
+def test_post_magic_success_prod_mode(
+    client, dummy_user, signin, app, mail_manager_mock
+):
     """
     Asserts user can request signin email by submitting email to /auth/magic
     """
-    user = dummy_user()
+    user = dummy_user("x@test.com")
     signin(user)
     token = user.get_signin_token()
 
     response = client.post(
-        f"/auth/magic", content_type="multipart/form-data", data=dict(email="x@x.com")
+        f"/auth/magic", content_type="multipart/form-data", data=dict(email=user.email)
     )
     host_url = app.config["HOST_URL"]
 
-    app.mail_manager.send.assert_called_once_with(
+    mail_manager_mock.send.assert_called_once_with(
         user.email,
         "Signin link",
         f"<a href='{host_url}/auth/magic?token={token}'>Click here to signin.</a>",
@@ -76,7 +81,7 @@ def test_post_magic_success(client, dummy_user, signin, app):
     assert render_template("magic.html") == response.data.decode("utf-8")
 
 
-def test_post_magic_bad_email(client, app):
+def test_post_magic_bad_email(client, app, mail_manager_mock):
     """
     Asserts user can't signin by submitting an invalid email
     """
@@ -88,10 +93,10 @@ def test_post_magic_bad_email(client, app):
 
     assert response.status_code == 400
     assert "Invalid Email" in response.data.decode("utf-8")
-    app.mail_manager.send.assert_not_called()
+    mail_manager_mock.send.assert_not_called()
 
 
-def test_post_magic_no_email(client, app):
+def test_post_magic_no_email(client, app, mail_manager_mock):
     """
     Asserts user can't signin by submitting no email
     """
@@ -105,7 +110,7 @@ def test_post_magic_no_email(client, app):
     assert "An email address is required to request signin" in response.data.decode(
         "utf-8"
     )
-    app.mail_manager.send.assert_not_called()
+    mail_manager_mock.send.assert_not_called()
 
 
 def test_get_magic_success(client, dummy_user):

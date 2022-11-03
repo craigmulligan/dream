@@ -1,12 +1,16 @@
 import os
 import subprocess
+import logging
 import shlex
 import click
 from flask.cli import AppGroup
-from flask_migrate import Migrate
+from app import database
 
-dev = AppGroup("dev")
-migrate = Migrate()
+logging.basicConfig(level=logging.INFO)
+
+dev = AppGroup("dev", short_help="All development commands")
+db = AppGroup("db", short_help="All database commands")
+prod = AppGroup("prod", short_help="All production commands")
 
 
 def run_sh(cmd: str, env=None, popen=False):
@@ -24,6 +28,27 @@ def run_sh(cmd: str, env=None, popen=False):
     exit(ret)
 
 
+@db.command("init")
+def run_init_db():
+    logging.info("Initializing db")
+    db = database.get()
+    db.setup()
+
+
+@prod.command("server")
+def prod_server():
+    run_init_db()
+    return run_sh(
+        "gunicorn 'run_app:app' -b 0.0.0.0:8080",
+    )
+
+
+@prod.command("worker")
+def prod_worker():
+    run_init_db()
+    return run_sh("celery --app 'run_app:celery' worker")
+
+
 @dev.command("test")
 @click.option("--watch", default=False, is_flag=True, help="watch mode")
 @click.argument("pytest_options", nargs=-1, type=click.UNPROCESSED)
@@ -36,23 +61,20 @@ def test(watch: bool, pytest_options):
     run_sh(f"pytest {pytest_flags}")
 
 
-@dev.command("db")
-def run_db():
-    run_sh("docker-compose up -d")
-
-
 def run_server(popen=False):
+    run_init_db()
     return run_sh(
         "flask run --host 0.0.0.0 --port 8080",
-        env={"FLASK_ENV": "development"},
+        env={"FLASK_DEBUG": "1"},
         popen=popen,
     )
 
 
 def run_worker(popen=False):
+    run_init_db()
     return run_sh(
         "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app run_app:celery worker --without-gossip",
-        env={"FLASK_ENV": "development"},
+        env={"FLASK_DEBUG": "development"},
         popen=popen,
     )
 
@@ -87,6 +109,7 @@ def run_mypy():
     run_sh("mypy .")
 
 
-def register_cli(app, db):
+def register(app):
     app.cli.add_command(dev)
-    migrate.init_app(app, db)
+    app.cli.add_command(db)
+    app.cli.add_command(prod)

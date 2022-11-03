@@ -1,21 +1,22 @@
 import re
-from sqlalchemy import Column, Integer
-from sqlalchemy.orm import validates
-from sqlalchemy_utils import (
-    EmailType,
-    Timestamp,
-)
-from app.database import BaseModel
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app, session
 
 
-class User(BaseModel, Timestamp):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(EmailType)
+class User:
     email_regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
     salt_signin = "signin"
+    id: int
+    email: str
+    created_at: str
+
+    def __init__(self, *, id: int, email: str, created_at: str) -> None:
+        if None in (id, email):
+            raise Exception("Invalid user")
+
+        self.id = id
+        self.email = email
+        self.created_at = created_at
 
     @staticmethod
     def _get_serializer(salt: str) -> URLSafeTimedSerializer:
@@ -37,9 +38,9 @@ class User(BaseModel, Timestamp):
     def can_view(self):
         return session["user_id"] == self.id
 
-    @validates("email")
-    def validate_email(self, _, address):
-        if not re.fullmatch(self.email_regex, address):
+    @staticmethod
+    def validate_email(address):
+        if not re.fullmatch(User.email_regex, address):
             raise ValueError("Invalid Email")
 
         return address
