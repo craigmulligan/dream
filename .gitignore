@@ -1,12 +1,5 @@
-.chalice/deployments/
-.chalice/venv/
-venv37
 __pycache__
 .testmondata
-.localstack
-infrastructure/.terraform/
-infrastructure/*.zip
-venv
-coverage.xml
-.coverage
 *.env
+*.db
+.mypy_cache

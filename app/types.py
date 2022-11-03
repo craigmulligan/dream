@@ -1,6 +1,6 @@
 from typing import Type
 from flask import Flask
-from app.database import FlaskCelery
+from app.celery import FlaskCelery
 from app.mail import MailManager
 
 

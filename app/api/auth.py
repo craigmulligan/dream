@@ -11,7 +11,7 @@ from flask import (
 )
 from markupsafe import Markup
 from app.models import User
-from app.database import db
+from app import database
 from app.utils import is_dev
 from app.tasks import email_send
 from itsdangerous import BadSignature, SignatureExpired
@@ -27,23 +27,21 @@ def signin_get():
 
 @blueprint.route("/magic", methods=["POST"])
 def magic_post():
+    db = database.get()
     email = request.form["email"]
 
     if not email:
         abort(400, "An email address is required to request signin")
 
-    user = User.query.filter_by(email=email).one_or_none()
+    user = db.user_get_by_email(email)
     token = None
 
     if not user:
         # create the user.
         try:
-            user = User(email=email)
+            user = db.user_create(email)
         except ValueError as e:
             abort(400, str(e))
-
-        db.session.add(user)
-        db.session.commit()
 
     host_url = current_app.config["HOST_URL"]
     token = user.get_signin_token()

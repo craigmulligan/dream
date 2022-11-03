@@ -1,6 +1,7 @@
 import smtplib, ssl
 from email.message import Message
 import logging
+from flask import current_app, g
 
 
 class MailManagerNotConfigured(Exception):
@@ -8,13 +9,14 @@ class MailManagerNotConfigured(Exception):
 
 
 class MailManager:
-    def init_app(self, app):
+    context_key = "_mail_manager"
+
+    def __init__(self, app):
         self.host = app.config.get("MAIL_HOST")
         self.port = app.config.get("MAIL_PORT")
         self.password = app.config.get("MAIL_PASSWORD")
         self.username = app.config.get("MAIL_USERNAME")
         self._from = app.config.get("MAIL_FROM")
-        app.mail_manager = self
 
     def send(self, to, subject, body):
         if None in (self._from, self.host, self.port, self.password, self.username):
@@ -38,4 +40,10 @@ class MailManager:
             server.sendmail(self._from, to, message.as_string())
 
 
-mail_manager = MailManager()
+def get() -> MailManager:
+    manager = getattr(g, MailManager.context_key, None)
+    if manager is None:
+        manager = MailManager(current_app)
+        setattr(g, MailManager.context_key, manager)
+
+    return manager

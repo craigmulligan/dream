@@ -1,15 +1,15 @@
-A boring but dreamy setup. 
+> A boring but dreamy setup.
 
-Tools:
+This setup is optimized for simplicity & development speed. This means minimal dependencies & infrastructure.
 
-* poetry
+# Tools
+
 * flask
-* sqlalchemy
 * celery
+* sqlite
+* poetry
 * black
 * mypy
-* hotwire / htmx
-* fly.io
 
 Getting started
 
@@ -23,12 +23,6 @@ poetry shell
 
 ```
 poetry install
-```
-
-# Run db.
-
-```
-flask dev db && flask db upgrade
 ```
 
 # Run test suite. 
@@ -65,9 +59,4 @@ flask dev fmt
 # Type-check code
 ```
 flask dev mypy
-```
-
-# Create a new migration
-```
-flask db migrate
 ```
