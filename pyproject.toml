@@ -9,20 +9,21 @@ python = "^3.8"
 psycopg2 = "^2.9.2"
 itsdangerous = "^2.0.1"
 python-dotenv = "^0.19.2"
-Flask-SQLAlchemy = "^2.5.1"
-Flask-Migrate = "^3.1.0"
+Flask-SQLAlchemy = "^3.1.0"
 Flask-Script = "^2.0.6"
 requests = "^2.27.1"
 SQLAlchemy-Utils = "^0.38.2"
 gunicorn = "^20.1.0"
-celery = "^5.2.3"
+flask-alembic = "^3.0.1"
+celery = "^5.2.7"
+kombu = {git = "https://github.com/craigmulligan/kombu.git"}
+pyright = "^1.1.355"
 
 [tool.poetry.dev-dependencies]
 pytest-flask = "^1.2.0"
 watchdog = { extras = ["watchmedo"], version = "^2.1.6" }
 mypy = "^0.920"
 black = "^21.12b0"
-flask-sqlalchemy-stubs = { git = "https://github.com/hobochild/flask-sqlalchemy-stubs.git" }
 pytest-cov = "^3.0.0"
 freezegun = "^1.1.0"
 types-freezegun = "^1.1.4"
@@ -35,7 +36,6 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-plugins = "flasksqlamypy"
 exclude = "venv"
 
 [[tool.mypy.overrides]]

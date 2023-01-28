@@ -1,12 +1,6 @@
-.chalice/deployments/
-.chalice/venv/
-venv37
 __pycache__
+.venv
 .testmondata
-.localstack
-infrastructure/.terraform/
-infrastructure/*.zip
-venv
-coverage.xml
-.coverage
 *.env
+*.db
+celerybeat-schedule

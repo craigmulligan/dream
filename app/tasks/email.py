@@ -1,10 +1,9 @@
-import logging
 from app.database import celery
-from flask import current_app
-from app.types import FlaskApp
-from typing import cast
+from app import mail
 
 
 @celery.task
 def email_send(to, subject, body):
-    return cast(FlaskApp, current_app).mail_manager.send(to, subject, body)
+    manager = mail.get_manager()
+    print(manager)
+    return manager.send(to, subject, body)

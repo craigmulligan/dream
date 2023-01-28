@@ -25,49 +25,43 @@ poetry shell
 poetry install
 ```
 
-# Run db.
-
-```
-flask dev db && flask db upgrade
-```
-
 # Run test suite. 
 ```
-flask dev test 
+flask test 
 ```
 
 # Run test suite in watch mode.
 ```
-flask dev test --watch
+flask test --watch
 ```
 
 # Run dev server and worker
 
 ```
-flask dev run
+flask all 
 ```
 
 # Run dev server 
 ```
-flask dev server
+flask server --dev
 ```
 
 # Run dev worker 
 ```
-flask dev worker 
+flask worker --dev
 ```
 
 # Format code
 ```
-flask dev fmt 
+flask fmt 
 ```
 
 # Type-check code
 ```
-flask dev mypy
+flask mypy
 ```
 
 # Create a new migration
 ```
-flask db migrate
+flask db revision "new table" 
 ```

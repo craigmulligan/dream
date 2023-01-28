@@ -11,6 +11,7 @@ from flask import (
 )
 from markupsafe import Markup
 from app.models import User
+from sqlalchemy import select
 from app.database import db
 from app.utils import is_dev
 from app.tasks import email_send
@@ -32,7 +33,8 @@ def magic_post():
     if not email:
         abort(400, "An email address is required to request signin")
 
-    user = User.query.filter_by(email=email).one_or_none()
+    stmt = select(User).filter_by(email=email)
+    user = db.session.scalars(stmt).one_or_none()
     token = None
 
     if not user:
