@@ -1,4 +1,5 @@
 from flask import render_template
+from sqlalchemy import text, select, func
 from app.models import User
 
 
@@ -54,8 +55,9 @@ def test_db_get_user_via_execute(client, dummy_user, db):
     """
     dummy_user()
 
-    result = db.session.execute("select * from users;").all()
+    result = db.session.execute(text('select * from user;')).all()
     assert len(result) == 1
 
-    result = db.session.execute("delete from users;")
-    assert User.query.count() == 0
+    result = db.session.execute(text("delete from user;"))
+
+    assert db.session.scalar(select(func.count()).select_from(User)) == 0

@@ -1,17 +1,12 @@
-from typing import TYPE_CHECKING
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from sqlalchemy.orm import DeclarativeBase
 from app.database.flask_celery import FlaskCelery
+from flask_alembic import Alembic
 
-db = SQLAlchemy()
+class Base(DeclarativeBase):
+  pass
 
-if TYPE_CHECKING:
-    # This is needed for the flasksqlamypy plugin.
-    from flask_sqlalchemy.model import Model
+db = SQLAlchemy(model_class=Base)
 
-    BaseModel = db.make_declarative_base(Model)
-else:
-    BaseModel = db.Model
-
-migrate = Migrate()
 celery = FlaskCelery()
+alembic = Alembic()

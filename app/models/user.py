@@ -1,21 +1,24 @@
 import re
-from sqlalchemy import Column, Integer
+from sqlalchemy import Integer
 from sqlalchemy.orm import validates
 from sqlalchemy_utils import (
     EmailType,
     Timestamp,
 )
-from app.database import BaseModel
+from sqlalchemy.orm import Mapped, mapped_column
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app, session
+from app.database import db
 
 
-class User(BaseModel, Timestamp):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(EmailType)
+class User(db.Model, Timestamp):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(EmailType)
     email_regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
     salt_signin = "signin"
+
+    def __init__(self, email):
+        self.email = email 
 
     @staticmethod
     def _get_serializer(salt: str) -> URLSafeTimedSerializer:

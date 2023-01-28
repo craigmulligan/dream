@@ -18,7 +18,13 @@ class FlaskCelery(Celery):
                 with app.app_context():
                     return self.run(*args, **kwargs)
 
-        self.Task = ContextTask
+        if not app.config.get("TESTING"):
+            # In the tests we don't want
+            # to push a app context
+            # this is because the unit
+            # tests already have a context pushed
+            # which confuses things.
+            self.Task = ContextTask
 
         app.celery = self
         return self

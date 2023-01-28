@@ -1,9 +1,9 @@
 from app import create_app
+from app import celery
 import logging
 
 
 logging.basicConfig(level=logging.INFO)
 
 app = create_app()
-# Not sure why but celery can't pick up "run_app:app.celery" but can do "run_app:celery"
-celery = app.celery
+__all__ = ("celery", "app")
