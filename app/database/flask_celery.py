@@ -1,4 +1,5 @@
 from celery import Celery, signals, Task
+Task.__class_getitem__ = classmethod(lambda cls, *args, **kwargs: cls) # type: ignore[attr-defined]
 
 
 class FlaskCelery(Celery):
@@ -24,7 +25,7 @@ class FlaskCelery(Celery):
             # this is because the unit
             # tests already have a context pushed
             # which confuses things.
-            self.Task = ContextTask
+            self.Task = ContextTask  # type: ignore
 
         app.celery = self
         return self

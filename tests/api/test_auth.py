@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from app.session import session
 from app.models import User
 from unittest.mock import patch
-from flask import g
 
 
 def test_get_sigin_page(client):
@@ -20,7 +19,7 @@ def test_post_magic_success_create_user(client):
     Asserts user can request signin email by submitting email to /auth/magic
     """
     email = "x@x.com"
-    User.query.count() == 0
+    assert User.query.count() == 0
     response = client.post(
         f"/auth/magic", content_type="multipart/form-data", data=dict(email=email)
     )
