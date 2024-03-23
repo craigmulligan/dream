@@ -1,8 +1,12 @@
+{% from 'macros.html' import centered %}
 {% extends "layout.html" %}
 {% block content %}
 {{ error_message }}
+
+{% call centered() %}
 <header>
-  <h3>Magic Link</h3>
+  <h3 class="text-xl mb-2">Magic Link</h3>
   <p>Check your email</p>
 </header>
+{% endcall %}
 {% endblock %}

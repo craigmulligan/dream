@@ -54,7 +54,7 @@ def magic_post():
     )
 
     if is_dev():
-        flash(magic_link)
+        flash(("info", magic_link))
     else:
         email_send.delay(user.email, "Signin link", str(magic_link))
 
@@ -76,12 +76,12 @@ def magic_get():
     except BadSignature:
         abort(403)
 
-    flash("You are now signed in.")
+    flash(("info", "You are now signed in."))
     return redirect(url_for("user.user_get", user_id=user_id))
 
 
 @blueprint.route("/logout", methods=["GET"])
 def logout_get():
     del session["user_id"]
-    flash("You are now logged out.")
+    flash(("info", "You are now logged out."))
     return redirect(url_for("_"))

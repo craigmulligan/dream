@@ -1,9 +1,17 @@
+{% from 'macros.html' import centered %}
 {% extends "layout.html" %}
 {% block content %}
+
+{% call centered() %}
 {{ error_message }}
-<header><h3>Use your email to signin.</h3></header>
-<form class="w-full max-w-sm mb-2 bg-red-700" method="POST" action="magic">
-    <input name="email" type="email" placeholder="you@email.com" required />
-    <button>Sign in</button>
+<div class="max-w-7xl m-auto">
+<header><h3 class="text-lg text-center mb-3">Use your email to signin.</h3></header>
+<form class="flex" method="POST" action="magic">
+    <div class="m-auto flex">
+      <input class="p-4 border-slate-900 border" name="email" type="email" placeholder="you@email.com" required />
+      <button class="p-4 bg-slate-900 text-white rounded-r-md">Sign in</button>
+    </div>
 </form>
+</div>
+{% endcall %}
 {% endblock %}
