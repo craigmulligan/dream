@@ -2,8 +2,8 @@
 {% block content %}
 {{ error_message }}
 <header><h3>Use your email to signin.</h3></header>
-<form class="mb-2" method="POST" action="magic">
-    <input name="email" type="email" placeholder="you@email.com" />
+<form class="w-full max-w-sm mb-2 bg-red-700" method="POST" action="magic">
+    <input name="email" type="email" placeholder="you@email.com" required />
     <button>Sign in</button>
 </form>
 {% endblock %}
