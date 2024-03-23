@@ -15,8 +15,8 @@ def run_sh(cmd: str, env=None, popen=False):
     if popen:
         return subprocess.Popen(args, env=copied_env)
 
-    ret = subprocess.call(args, env=copied_env)
-    exit(ret)
+    proc = subprocess.run(args, env=copied_env, shell=True)
+    exit(proc.returncode)
 
 
 @click.command("test")
@@ -30,6 +30,18 @@ def test(watch: bool, pytest_options):
 
     run_sh(f"pytest {pytest_flags}")
 
+def run_tailwind_install():
+    # install tailwind
+    if not os.path.isfile('./tailwindcss'):
+        print('Installing tailwindcss')
+        run_sh("curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss")
+
+
+def run_tailwind_dev(popen=False):
+    return run_sh(
+        "./tailwindcss -i ./app/static/input.css -o ./app/static/output.css --watch",
+        popen=popen,
+    )
 
 def run_server_dev(popen=False):
     return run_sh(
@@ -51,7 +63,11 @@ def run_worker_dev(popen=False):
 def run_server(dev: bool):
     if dev:
         alembic.upgrade()
-        return run_server_dev()
+        run_tailwind_install()
+
+        procs = [run_server_dev(popen=True), run_tailwind_dev(popen=True)]
+        for p in procs:
+            p.wait()
     else:
         return run_sh(
             "gunicorn 'run_app:app' -b 0.0.0.0:8080",
@@ -72,7 +88,9 @@ def run_all(dev: bool):
     """Run both the worker and dev server"""
     if dev:
         alembic.upgrade()
-        procs = [run_worker_dev(popen=True), run_server_dev(popen=True)]
+        run_tailwind_install()
+
+        procs = [run_worker_dev(popen=True), run_server_dev(popen=True), run_tailwind_dev(popen=True)]
         for p in procs:
             p.wait()
     else:
